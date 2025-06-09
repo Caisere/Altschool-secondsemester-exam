@@ -66,6 +66,5 @@ const Todos = () => {
     )
 }
 
-// 'bg-secBackground hover:bg-secBackground/70
 
 export default Todos
