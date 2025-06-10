@@ -16,14 +16,13 @@ const Todo = () => {
     const {data: eachTodo, isLoading, error} = useQuery({
         queryKey: ['todo', id],
         queryFn: () => getEachTodo(id),
-        // enabled: !!id,
     })
     
     // const [editTodo, setEditTodo] = useState(eachTodo?.title);
     // const navigate = useNavigate();
 
     
-    console.log(id);
+    // console.log(id);
     
     // const handleBack = () => {
     //     navigate(-1);
@@ -57,7 +56,7 @@ const Todo = () => {
                 </Link>
                 <Button className='bg-secBackground hover:bg-secBackground/70 text-white px-4 py-2 rounded-md' onClick={handleEdit}>{isEditOpen ? 'Cancel Edit' : 'Edit Todo'}</Button>
             </div>
-            {isEditOpen && <TodoEditForm todo={eachTodo.title} />}
+            {isEditOpen && <TodoEditForm todo={eachTodo} setIsEditOpen={setIsEditOpen} />}
         </div>
     );
 }

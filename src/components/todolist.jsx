@@ -24,7 +24,7 @@ const TodoList = ({todo, pageParam}) => {
                         data: previousTodos?.data?.filter(todo => todo.id !== id)
                     });
             }
-            return {previousTodos};
+            // return {previousTodos};
         },
         onError: (error, variables, context) => {
             if (context?.previousTodos) {
@@ -34,7 +34,10 @@ const TodoList = ({todo, pageParam}) => {
         },
         onSuccess: () => {
             toast.success('Todo deleted successfully');
-            queryClient.invalidateQueries({ queryKey: ['todos', pageParam] })
+            // setTimeout(() => {
+            //     queryClient.invalidateQueries({ queryKey: ['todos', pageParam] })
+            // }, 3000);
+            // queryClient.invalidateQueries({ queryKey: ['todos', pageParam] })
         }
     })
 

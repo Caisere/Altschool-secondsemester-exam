@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Github } from 'lucide-react'
 
 const UserDetails = ({user}) => {
         const {
@@ -19,7 +20,7 @@ const UserDetails = ({user}) => {
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>Email:</span> {email || 'N/A'}</p>
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>Public Repos:</span> {public_repos}</p>
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>X/Twitter:</span> @{twitter_username || 'N/A'}</p>
-            <Link className=' text-sm md:text-base text-white hover:underline max-w-full' to={url} target='_blank' rel='noopener noreferrer'><span className='font-bold'>URL:</span> {url || 'N/A'}</Link>
+            <Link className=' text-sm md:text-base text-white hover:underline max-w-full' to={url} target='_blank' rel='noopener noreferrer'><Github /> </Link>
         </div>
     )
 }

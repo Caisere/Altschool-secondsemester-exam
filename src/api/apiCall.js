@@ -60,12 +60,12 @@ async function addTodo(todo) {
 }
 
 // API Request to update a todo using the todo id
-async function updateTodo(id, todo) {
+async function updateTodo({id, newTodo}) {
     try {
-        const response = await axios.put(`${BASED_URL}/todos/${id}`, todo);
+        const response = await axios.put(`${BASED_URL}/todos/${id}`, newTodo);
         return response.data;
-    } catch {
-        throw new Error("Failed to update todo");
+    } catch(error) {
+        throw new Error(`Failed to update todo: ${error.message}`);
     }
 }
 
