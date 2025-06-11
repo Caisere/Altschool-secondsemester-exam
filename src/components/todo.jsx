@@ -43,7 +43,7 @@ const Todo = () => {
             <Card className='w-full max-w-[60%]'>
                 <CardHeader>
 
-                    <CardTitle>{eachTodo.title}</CardTitle>
+                    <CardTitle>{eachTodo.todo}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>User ID: {eachTodo.userId}</CardDescription>

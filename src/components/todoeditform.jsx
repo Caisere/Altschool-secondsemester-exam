@@ -9,13 +9,13 @@ import { toast } from "react-hot-toast";
 
 const TodoEditForm = ({ todo, setIsEditOpen }) => {
     const queryClient = useQueryClient();
-    const { id, title, completed, userId } = todo;
-    const [editTodo, setEditTodo] = useState(title);
+    const { id, todo: todoText, completed, userId } = todo;
+    const [editTodo, setEditTodo] = useState(todoText);
     const [editCompleted, setEditCompleted] = useState(completed);
 
     const { register, handleSubmit } = useForm({
         defaultValues: {
-        title: title,
+        todo: todoText,
         completed: completed,
         },
     });
@@ -56,7 +56,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
         if (context?.previousTodo) {
             queryClient.setQueryData(["todo", variables.id], context.previousTodo);
         }
-            toast.error("Failed to update todo");
+            toast.error("Failed to update todo", err.message);
         },
         onSuccess: () => {
             toast.success("Todo updated successfully");
@@ -76,7 +76,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
         const newTodo = {
             id: id,
             userId: userId,
-            title: data.title,
+            todo: data.todo,
             completed: data.completed,
         };
         console.log(newTodo);
@@ -92,7 +92,8 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
             <Input
                 type="text"
                 value={editTodo}
-                {...register("title")}
+                name="todo"
+                {...register("todo")}
                 onChange={handleEditTodoTitle}
                 placeholder="Edit Todo"
             />

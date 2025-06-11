@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 
 const TodoList = ({todo, pageParam}) => {
     const queryClient = useQueryClient();
-    const {id, title, completed} = todo;
+    const {id, todo: todoText, completed} = todo;
 
     const {mutate: deleteTodoMutation} = useMutation({
         mutationFn: deleteTodo,
@@ -59,7 +59,7 @@ const TodoList = ({todo, pageParam}) => {
         <li className='flex items-center justify-between w-full border border-gray-200 p-2 rounded-md'>
             <Link to={`/todo/${id}`} className='flex items-center justify-start w-full gap-2'>
                 <input type="checkbox" checked={completed} />
-                <p className='flex-1'>{title}</p>
+                <p className='flex-1'>{todoText}</p>
             </Link>
             <Button onClick={handleDelete} className='bg-red-500 hover:bg-red-600 text-white rounded-md'><Trash className='text-white rounded-md' /></Button>
         </li>

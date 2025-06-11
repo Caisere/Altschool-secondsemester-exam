@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASED_URL = "https://jsonplaceholder.typicode.com";
+// const BASED_URL = "https://jsonplaceholder.typicode.com";
+const BASED_URL = 'https://dummyjson.com';
 const GITHUB_BASED_URL = "https://api.github.com/users/caisere";
 
 // https://jsonplaceholder.typicode.com/todos?_start=0&_limit=10
@@ -23,14 +24,14 @@ async function getTodos(pageParam = 1, limit = 10) {
     const skip = (pageParam - 1) * limit;
     try {
         const response = await axios.get(
-        `${BASED_URL}/todos?_start=${skip}&_limit=${limit}`
+        `${BASED_URL}/todos?limit=${limit}&skip=${skip}`
         );
-        // console.log(response.data);
+        // console.log(response.data.todos);
 
         const total = parseInt(response.headers["x-total-count"] || "200", 10);
 
         return {
-        data: response.data,
+        data: response.data.todos,
         total,
         };
     } catch {
@@ -42,7 +43,7 @@ async function getTodos(pageParam = 1, limit = 10) {
 async function getEachTodo(id) {
     try {
         const response = await axios.get(`${BASED_URL}/todos/${id}`)
-        console.log(response.data);
+        // console.log(response.data);
         return response.data;
     } catch {
         throw new Error("Failed to fetch todo");
@@ -63,6 +64,7 @@ async function addTodo(todo) {
 async function updateTodo({id, newTodo}) {
     try {
         const response = await axios.put(`${BASED_URL}/todos/${id}`, newTodo);
+        console.log(response.data);
         return response.data;
     } catch(error) {
         throw new Error(`Failed to update todo: ${error.message}`);
