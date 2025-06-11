@@ -45,7 +45,7 @@ const Todos = () => {
         <>
             <ul className='flex flex-col gap-2 w-[80%] md:max-w-[70%]'>
                 {todos?.map((todo) => (
-                    <TodoList key={todo.id} todos={todo} pageParam={pageParam} />
+                    <TodoList key={todo.id} todo={todo} pageParam={pageParam} />
                 ))}
             </ul>
             <div className='flex justify-center items-center gap-6 mt-4 w-full max-w-full md:max-w-[80%]'>
