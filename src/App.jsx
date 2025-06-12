@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
 
-
+// lazy loading of pages 
 const HomePage = lazy(() => import('./pages/homepage'));
 const PageNotFound = lazy(() => import('./pages/pagenotfound'));
 const Todo = lazy(() => import('./components/todo'));
@@ -22,6 +22,7 @@ const queryClient = new QueryClient({
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
+            {/* Toaster for notifications */}
             <Toaster 
                 position='top-center'
                 gutter={12} //space between the toast

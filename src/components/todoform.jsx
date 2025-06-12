@@ -1,46 +1,106 @@
-import React from 'react'
-import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {addTodo} from '../api/apiCall'
-import toast from 'react-hot-toast'
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addLocalTodo } from "../utils/localStorage";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
-const TodoForm = ({setIsOpen}) => {
+const TodoForm = ({ setIsOpen }) => {
     const queryClient = useQueryClient();
-    const { register, handleSubmit, reset } = useForm();
-    
-    const {mutate: addTodoMutation} = useMutation({
-        mutationFn: addTodo,
-        onError: (error) => {
-            // queryClient.setQueryData(['todos'], (oldData) => oldData);
-            toast.error('Failed to add todo', error.message);
-            console.log(error);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['todos']});
-            toast.success('Todo added successfully');
+    const { register, handleSubmit, reset, formState } = useForm();
+    const { errors } = formState;
+
+    const { mutate: addTodoMutation, isPending } = useMutation({
+        mutationFn: addLocalTodo,
+        onMutate: async (newTodo) => {
+            // Cancel any outgoing refetches
+            await queryClient.cancelQueries({ queryKey: ["todos"] });
+
+            // Get the current todos for the first page
+            const previousTodos = queryClient.getQueryData(["todos", 1]);
+
+            // Optimistically update the cache with the new local todo
+            if (previousTodos) {
+                const addedTodo = {
+                ...newTodo,
+                id: "temp-id", // Will be replaced by the actual local ID
+            };
+            queryClient.setQueryData(["todos", 1], {
+                ...previousTodos,
+                data: [addedTodo, ...previousTodos.data],
+            });
         }
-    })
+            return { previousTodos };
+        },
+        onError: (error, newTodo, context) => {
+            if (context?.previousTodos) {
+                queryClient.setQueryData(["todos", 1], context.previousTodos);
+            }
+            toast.error("Failed to add todo: " + error.message);
+        },
+        onSuccess: (newTodo) => {
+            // Update the cache with the actual local todo (with proper ID)
+            const previousTodos = queryClient.getQueryData(["todos", 1]);
+            if (previousTodos) {
+                queryClient.setQueryData(["todos", 1], {
+                ...previousTodos,
+                data: previousTodos.data.map((todo) =>
+                    todo.id === "temp-id" ? newTodo : todo
+                ),
+                });
+            }
+            toast.success("Todo added successfully");
+        },
+    });
 
     function onSubmit(data) {
         const newTodo = {
-            title: data['add-todo'],
+            todo: data["add-todo"],
             completed: false,
-            userId: 1
-        }
-        console.log(newTodo);
+            userId: 1,
+        };
         addTodoMutation(newTodo);
         reset();
         setIsOpen(false);
     }
-    
+
+    function onError() {
+        toast.error("Failed to add todo");
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 w-[90%] max-w-full items-center rounded-2xl shadow-lg border border-border p-6 mb-8 md:w-[60%] ">
+        <form
+            role="form"
+            aria-label="Add Todo Form"
+            onSubmit={handleSubmit(onSubmit, onError)}
+            className="flex flex-col gap-2 w-[90%] max-w-full items-center rounded-2xl shadow-lg border border-border p-6 mb-8 md:w-[60%] "
+        >
             {/* <label htmlFor="add-todo">Add a new todo</label> */}
-            <input className='flex-1 border border-gray-200 rounded-md p-2 w-full' type="text" placeholder="Add a new todo" name="add-todo" {...register('add-todo')}/>
-            <Button className="bg-secBackground hover:bg-secBackground/70 text-white px-4 py-2 rounded-md text-center" type="submit">Add</Button>
+            <div className="flex flex-col gap-2 w-full">
+                <Input
+                    role="textbox"
+                    aria-label="Add Todo Input"
+                    className="flex-1 border border-gray-200 rounded-md p-2 w-full focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-secBackground"
+                    type="text"
+                    placeholder="Add a new todo"
+                    name="add-todo"
+                    {...register("add-todo", { required: "Todo is required" })}
+                />
+                {errors?.["add-todo"]?.message && <p className="text-red-500">{errors["add-todo"].message}</p>}
+            </div>
+            <Button
+                role="button"
+                aria-label="Add Todo Button"
+                disabled={isPending}
+                className="bg-secBackground hover:bg-secBackground/80 hover:text-gray transition-all duration-300 text-white px-4 py-2 rounded-md text-center cursor-pointer"
+                type="submit"
+            >
+                {isPending ? <Loader2 className="animate-spin" /> : "Add Todo"}
+            </Button>
         </form>
-    )
-}
+    );
+};
 
 export default TodoForm;
