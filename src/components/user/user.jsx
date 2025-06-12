@@ -3,7 +3,8 @@ import Avatar from './avatar'
 import { getGithubUser } from '../../api/apiCall'
 import { useQuery } from '@tanstack/react-query'
 import UserDetails from './userdetails'
-import { Loader2 } from 'lucide-react'
+// import { Loader2 } from 'lucide-react'
+import UserLoadingSkeleton from '../loadingskeleton/userloadingskeleton'
 
 
 const User = () => {
@@ -14,7 +15,7 @@ const User = () => {
 
     const {avatar_url} = user || {};
 
-    if (isLoading) return <div className='flex items-center justify-center gap-2 text-white'><Loader2 className='animate-spin' /> Loading...</div>
+    if (isLoading) return <UserLoadingSkeleton />
     if (error) return <div className='text-red-500 flex items-center justify-center gap-2'>Error: {error.message}</div>
     return (
         <div className='flex flex-col gap-2 w-full justify-center items-center'>

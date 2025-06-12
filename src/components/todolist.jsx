@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button'
 
+
 const TodoList = ({todo, pageParam}) => {
     const queryClient = useQueryClient();
     const {id, todo: todoText, completed} = todo;

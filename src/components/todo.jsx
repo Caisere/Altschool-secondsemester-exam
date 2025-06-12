@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { getEachTodo } from "../api/apiCall";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { EachTodoSkeleton } from "./loadingskeleton";
+import { PageLoader } from "./loadingskeleton";
 import {
   Card,
   CardContent,
@@ -16,44 +18,45 @@ import { TodoEditForm } from "@/components";
 import { getLocalTodoById } from "../utils/localStorage";
 
 const Todo = () => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const { id } = useParams();
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const { id } = useParams();
 
-  const {
-    data: eachTodo,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["todo", id],
-    queryFn: async () => {
-      // Check if it's a local todo first
-      if (id.startsWith("local-")) {
-        const localTodo = getLocalTodoById(id);
-        if (!localTodo) throw new Error("Todo not found");
-        return localTodo;
-      }
-      // If not local, fetch from API
-      return getEachTodo(id);
-    },
-  });
+    const {
+        data: eachTodo,
+        isPending: isLoading,
+        error,
+    } = useQuery({
+        queryKey: ["todo", id],
+        queryFn: async () => {
+        // Check if it's a local todo first
+        if (id.startsWith("local-")) {
+            const localTodo = getLocalTodoById(id);
+            if (!localTodo) throw new Error("Todo not found");
+            return localTodo;
+        }
+        // If not local, fetch from API
+        return getEachTodo(id);
+        },
+    });
 
-  // const [editTodo, setEditTodo] = useState(eachTodo?.title);
-  // const navigate = useNavigate();
+    // const [editTodo, setEditTodo] = useState(eachTodo?.title);
+    // const navigate = useNavigate();
 
-  // console.log(id);
+    // console.log(id);
 
-  // const handleBack = () => {
-  //     navigate(-1);
-  // }
+    // const handleBack = () => {
+    //     navigate(-1);
+    // }
 
-  function handleEdit(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsEditOpen((is) => !is);
-  }
+    function handleEdit(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsEditOpen((is) => !is);
+    }
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+    if (isLoading) return <div> <EachTodoSkeleton/></div>;
+
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div className="min-h-screen w-full h-full flex flex-col gap-4 justify-center items-center flex-1 md:flex md:flex-col md:justify-center md:items-center md:w-full md:relative md:flex-1 md:left-[10%] md:gap-4">

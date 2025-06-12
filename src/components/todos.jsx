@@ -65,7 +65,7 @@ const Todos = () => {
         setPageParam(pageParam + 1);
     }
 
-    if (isLoadingTodo) return <div className="text-center text-2xl font-bold">Loading...</div>;
+    // if (isLoadingTodo) return <TodoLoadingSkeleton />;
     if (isErrorTodo) return <div className="text-center text-2xl font-bold">Error fetching todos</div>;
     return (
         <div className="w-full flex flex-col items-center gap-4">
@@ -116,7 +116,7 @@ const Todos = () => {
             {/* Todo List */}
             <ul className="flex flex-col gap-2 w-[80%] md:max-w-[70%]" role="list">
                 {filteredTodos?.map((todo) => (
-                <TodoList key={todo.id} todo={todo} pageParam={pageParam} />
+                    <TodoList key={todo.id} todo={todo} pageParam={pageParam} isLoadingTodo={isLoadingTodo} />
                 ))}
             </ul>
             <div className="flex justify-center items-center gap-6 mt-4 w-full max-w-full md:max-w-[80%]">

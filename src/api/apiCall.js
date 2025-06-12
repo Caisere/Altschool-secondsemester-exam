@@ -10,7 +10,7 @@ const GITHUB_BASED_URL = "https://api.github.com/users/caisere";
 async function getGithubUser() {
   try {
     const response = await axios.get(`${GITHUB_BASED_URL}`);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch {
     throw new Error("Failed to fetch github user");
