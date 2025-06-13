@@ -1,12 +1,11 @@
 import React from 'react'
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react'
 
 const EachTodoLoader = () => {
     return (
-        <div className="min-h-screen w-full h-full flex flex-col gap-4 justify-center items-center flex-1 md:flex md:flex-col md:justify-center md:items-center md:w-full md:relative md:flex-1 md:left-[10%] md:gap-4">
-            Loading...
-            <div className='grid place-items-center h-[100vh]'>
-                <Loader2 className='w-20 h-20 text-secBackground' />
+        <div className="md:left-[100%] md:z-[10000]">
+            <div className=''>
+                <Loader2 className='w-12 h-12 text-secBackground text-center' />
             </div>
         </div>
     )
