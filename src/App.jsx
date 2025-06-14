@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { PageLoader } from "./components/loadingskeleton";
 import { PageProvider } from "./context/PageContext";
+import DocumentTitle from "./components/pagetitle/DocumentTitle";
 // import { PageNavigationSkeleton } from './components/loadingskeleton'
 
 // lazy loading of pages
@@ -38,10 +39,10 @@ function App() {
                         // toast options (success, error)
                         success: {
                             duration: 3000, //success toast duration (3s)
-                        },
+                            },
                         error: {
                             duration: 3000, //error toast duration (5s)
-                        },
+                            },
                         style: {
                             //style of the toast
                             fontSize: "16px",
@@ -51,10 +52,12 @@ function App() {
                             color: "#fff",
                             borderRadius: "4px",
                             boxShadow:
-                                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                         },
-                }}/>
+                    }}
+                />
                 <BrowserRouter>
+                    <DocumentTitle />
                     <Suspense fallback={<PageLoader />}>
                         <Routes>
                             <Route path="/" element={<HomePage />}>
