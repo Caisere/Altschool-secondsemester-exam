@@ -46,20 +46,16 @@ const TodoList = ({todo, pageParam}) => {
         e.preventDefault();
         e.stopPropagation();
         deleteTodoMutation(id);
-        console.log('deleting todo', id);
+        // console.log('deleting todo', id);
     }
 
 
     function handleComplete(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('completing todo', id);
+        // console.log('completing todo', id);
     }
 
-    // function handleEdit(e) {
-    //     e.preventDefault();
-    //     console.log(todo.id);
-    // }
 
     return (
         <li className='flex items-center justify-between w-full border border-gray-200 p-2 rounded-md' role="listitem">
