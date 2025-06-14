@@ -2,7 +2,7 @@
 
 A feature-rich, responsive Todo application built with React and modern web technologies. This application combines server-side data with local storage capabilities, providing a seamless experience for managing tasks.
 
-![Todo App Screenshot](screenshots/todo-app.png)
+![Todo App Screenshot](screenshots/Screenshot%202025-06-13%20at%206.14.41 PM.png)
 
 ## Features
 
