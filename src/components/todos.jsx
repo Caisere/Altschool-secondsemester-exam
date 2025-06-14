@@ -5,9 +5,10 @@ import { TodoList } from "./index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getLocalTodos } from "../utils/localStorage";
+import { usePageContext } from "@/context/PageContext";
 
 const Todos = () => {
-    const [pageParam, setPageParam] = useState(1);
+    const {pageParam, setPageParam} = usePageContext();
     const [searchQuery, setSearchQuery] = useState("");
     const [filterStatus, setFilterStatus] = useState("all"); // 'all', 'completed', 'active'
     const limit = 10;

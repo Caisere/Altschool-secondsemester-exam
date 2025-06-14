@@ -3,14 +3,17 @@ import { TodoForm, Todos } from "../components";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "../api/apiCall";
+import { usePageContext } from "@/context/PageContext";
 
 const MainPage = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const {pageParam} = usePageContext()
+
 
     // Fetch todos for stats
     const { data } = useQuery({
-        queryKey: ["todos", 1], // First page is enough for stats
-        queryFn: () => getTodos(), // Fetch more todos to get better stats
+        queryKey: ["todos", pageParam], 
+        queryFn: () => getTodos(),
     });
 
     const todos = data?.data || [];

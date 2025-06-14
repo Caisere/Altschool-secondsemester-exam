@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { EachTodoSkeleton } from "./loadingskeleton";
 import { PageLoader } from "./loadingskeleton";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
 } from "@/components/ui/card";
 // import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 // import { Input } from '@/components/ui/input';
@@ -28,14 +28,16 @@ const Todo = () => {
     } = useQuery({
         queryKey: ["todo", id],
         queryFn: async () => {
-        // Check if it's a local todo first
-        if (id.startsWith("local-")) {
-            const localTodo = getLocalTodoById(id);
-            if (!localTodo) throw new Error("Todo not found");
-            return localTodo;
-        }
-        // If not local, fetch from API
-        return getEachTodo(id);
+            // Check if it's a local todo first
+            if (id.startsWith("local-")) {
+                const localTodo = getLocalTodoById(id);
+                if (!localTodo) {
+                    throw new Error("Todo not found");
+                }
+                return localTodo;
+            }
+            // If the todo is not from the local todo (newly created todo), fetch from API using the API Id from the todo url.
+            return getEachTodo(id);
         },
     });
 
@@ -68,9 +70,6 @@ const Todo = () => {
                 <CardContent>
                     <CardDescription>User ID: {eachTodo.userId}</CardDescription>
                     <p>Completed: {eachTodo.completed ? "Yes" : "No"}</p>
-                    {/* <p className="text-sm text-muted-foreground mt-2">
-                        {id.startsWith("local-") ? "(Stored locally)" : "(From API)"}
-                    </p> */}
                 </CardContent>
             </Card>
             <div className="flex justify-center items-center gap-4">
