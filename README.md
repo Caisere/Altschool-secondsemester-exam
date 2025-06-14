@@ -7,6 +7,7 @@ A feature-rich, responsive Todo application built with React and modern web tech
 ## Features
 
 - ✨ Modern, responsive UI with a clean design
+- 📝 Dynamic Page Titles Based on Routing 
 - 🔍 Real-time search functionality
 - 🏷️ Filter todos by status (All/Active/Completed)
 - 📱 Fully responsive design for all devices
