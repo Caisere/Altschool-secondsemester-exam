@@ -21,9 +21,9 @@ const TodoList = ({todo, pageParam}) => {
 
             if (previousTodos) {
                 queryClient.setQueryData(['todos', pageParam], {
-                        ...previousTodos,
-                        data: previousTodos?.data?.filter(todo => todo.id !== id)
-                    });
+                    ...previousTodos,
+                    data: previousTodos?.data?.filter(todo => todo.id !== id)
+                });
             }
             // return {previousTodos};
         },

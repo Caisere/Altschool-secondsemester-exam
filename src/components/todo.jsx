@@ -4,7 +4,7 @@ import { getEachTodo } from "../api/apiCall";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { EachTodoSkeleton } from "./loadingskeleton";
-import { PageLoader } from "./loadingskeleton";
+// import { PageLoader } from "./loadingskeleton";
 import {
     Card,
     CardContent,

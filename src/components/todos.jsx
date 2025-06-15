@@ -16,15 +16,15 @@ const Todos = () => {
     const { data, isLoadingTodo, isErrorTodo } = useQuery({
         queryKey: ["todos", pageParam],
         queryFn: async () => {
-        const apiResponse = await getTodos(pageParam, limit);
-        const localTodos = getLocalTodos();
+            const apiResponse = await getTodos(pageParam, limit);
+            const localTodos = getLocalTodos();
 
-        // Merge API todos with local todos
-        return {
-            ...apiResponse,
-            data: [...localTodos, ...apiResponse.data],
-            total: apiResponse.total + localTodos.length,
-        };
+            // Merge API todos with local todos
+            return {
+                ...apiResponse,
+                data: [...localTodos, ...apiResponse.data],
+                total: apiResponse.total + localTodos.length,
+            };
         },
     });
 
@@ -55,6 +55,7 @@ const Todos = () => {
         setPageParam(pageParam - 1);
     }
 
+    // function to handle Page Change
     function handlePageChange(index) {
         setPageParam(index + 1);
     }
@@ -71,6 +72,7 @@ const Todos = () => {
     return (
         <div className="w-full flex flex-col items-center gap-4">
             <div className="w-[80%] md:max-w-[70%] flex flex-col gap-4">
+                {/* Search Todo Input */}
                 <Input
                     role="search"
                     aria-label="Search todos"
@@ -80,7 +82,9 @@ const Todos = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full"
                 />
+                {/* Filtering */}
                 <nav className="flex gap-2 justify-center">
+                    {/* All Todos Button */}
                     <Button
                         role="button"
                         aria-label="All Todos"
@@ -91,6 +95,7 @@ const Todos = () => {
                     >
                         All
                     </Button>
+                    {/* Active Todos Button */}
                     <Button
                         role="button"
                         aria-label="Active Todos"
@@ -101,6 +106,7 @@ const Todos = () => {
                     >
                         Active
                     </Button>
+                    {/* Completed Todos Button */}
                     <Button
                         role="button"
                         aria-label="Completed Todos"
@@ -120,8 +126,10 @@ const Todos = () => {
                     <TodoList key={todo.id} todo={todo} pageParam={pageParam} isLoadingTodo={isLoadingTodo} />
                 ))}
             </ul>
+            {/* Pagination */}
             <div className="flex justify-center items-center gap-6 mt-4 w-full max-w-full md:max-w-[80%]">
                 <nav className="flex justify-center items-center flex-wrap gap-2">
+                    {/* Previous Pagination Button */}
                     <Button
                         role="button"
                         aria-label="Previous Page"
@@ -134,6 +142,7 @@ const Todos = () => {
                         Previous
                     </Button>
 
+                    {/* Pagination button in respect to total pages */}
                     {Array.from({ length: totalPages }).map((_, index) => (
                         <Button
                             role="button"

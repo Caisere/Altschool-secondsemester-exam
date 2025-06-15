@@ -22,7 +22,7 @@ const UserDetails = ({user}) => {
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>Username:</span> {login}</p>
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>Email:</span> {email || 'N/A'}</p>
             <p className='text-sm md:text-base text-white'> <span className='font-bold'>Public Repos:</span> {public_repos}</p>
-            <Link to={`https://x.com/${twitter_username}`} target='_blank' rel='noopener noreferrer' className='text-sm md:text-base text-white'> <span className='font-bold'>X/Twitter:</span> @{twitter_username || 'N/A'}</Link>
+            <Link to={`https://x.com/${twitter_username}`} target='_blank' rel='noopener noreferrer' className='text-sm md:text-base text-white hover:underline'> <span className='font-bold'>X/Twitter:</span> @{twitter_username || 'N/A'}</Link>
             <Link className=' text-sm md:text-base text-white hover:underline max-w-full' to={html_url} target='_blank' rel='noopener noreferrer'><Github className='w-8 h-8 font-bold text-2xl border border-gray-200 rounded-full p-2' /> </Link>
         </div>
     )

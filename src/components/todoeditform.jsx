@@ -89,7 +89,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
         }
 
         function onError() {
-            toast.error("Failed to update todo");
+            toast.error("Failed to update todo from form submission");
         }
 
     return (
@@ -117,6 +117,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
                     checked={editCompleted}
                     {...register("completed")}
                     onChange={handleCompleted}
+                    className="p-0"
                 />
             </div>
             <Button

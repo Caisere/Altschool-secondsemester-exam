@@ -6,9 +6,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLocalTodo } from "../utils/localStorage";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import { usePageContext } from "@/context/PageContext";
 
 const TodoForm = ({ setIsOpen }) => {
     const queryClient = useQueryClient();
+    const {pageParam} = usePageContext();
     const { register, handleSubmit, reset, formState } = useForm();
     const { errors } = formState;
 
@@ -19,36 +21,36 @@ const TodoForm = ({ setIsOpen }) => {
             await queryClient.cancelQueries({ queryKey: ["todos"] });
 
             // Get the current todos for the first page
-            const previousTodos = queryClient.getQueryData(["todos", 1]);
+            const previousTodos = queryClient.getQueryData(["todos", pageParam]);
 
             // Optimistically update the cache with the new local todo
             if (previousTodos) {
                 const addedTodo = {
-                ...newTodo,
-                id: "temp-id", // Will be replaced by the actual local ID
-            };
-            queryClient.setQueryData(["todos", 1], {
-                ...previousTodos,
-                data: [addedTodo, ...previousTodos.data],
-            });
-        }
+                    ...newTodo,
+                    id: "temp-id", // Will be replaced by the actual local ID
+                };
+                queryClient.setQueryData(["todos", pageParam], {
+                    ...previousTodos,
+                    data: [addedTodo, ...previousTodos.data],
+                });
+            }
             return { previousTodos };
         },
         onError: (error, newTodo, context) => {
             if (context?.previousTodos) {
-                queryClient.setQueryData(["todos", 1], context.previousTodos);
+                queryClient.setQueryData(["todos", pageParam], context.previousTodos);
             }
             toast.error("Failed to add todo: " + error.message);
         },
         onSuccess: (newTodo) => {
             // Update the cache with the actual local todo (with proper ID)
-            const previousTodos = queryClient.getQueryData(["todos", 1]);
+            const previousTodos = queryClient.getQueryData(["todos", pageParam]);
             if (previousTodos) {
-                queryClient.setQueryData(["todos", 1], {
-                ...previousTodos,
-                data: previousTodos.data.map((todo) =>
-                    todo.id === "temp-id" ? newTodo : todo
-                ),
+                queryClient.setQueryData(["todos", pageParam], {
+                    ...previousTodos,
+                    data: previousTodos.data.map((todo) =>
+                        todo.id === "temp-id" ? newTodo : todo
+                    ),
                 });
             }
             toast.success("Todo added successfully");
@@ -56,13 +58,15 @@ const TodoForm = ({ setIsOpen }) => {
     });
 
     function onSubmit(data) {
+        // new todo object
         const newTodo = {
             todo: data["add-todo"],
             completed: false,
             userId: 1,
         };
+        // mutate function
         addTodoMutation(newTodo);
-        reset();
+        reset(); // form reset
         setIsOpen(false);
     }
 
