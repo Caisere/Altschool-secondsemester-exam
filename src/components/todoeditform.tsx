@@ -1,22 +1,42 @@
 import React from "react";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTodo } from "../api/apiCall";
 import { toast } from "react-hot-toast";
+import type { TodoInfo } from "../types";
 
-const TodoEditForm = ({ todo, setIsEditOpen }) => {
+type TodoEditFormProps = {
+    todo: TodoInfo;
+    setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+interface FormData {
+    todo: string;
+    completed: boolean;
+    userId: number; 
+}
+
+
+
+function TodoEditForm ({ todo, setIsEditOpen }: TodoEditFormProps) {
+
     const queryClient = useQueryClient();
-    const { id, todo: todoText, completed, userId } = todo;
-    const [editTodo, setEditTodo] = useState(todoText);
-    const [editCompleted, setEditCompleted] = useState(completed);
 
-    const { register, handleSubmit, formState } = useForm({
+
+    const { id, todo: todoText, completed, userId } = todo;
+
+    const [editTodo, setEditTodo] = useState<string>(todoText);
+
+    const [editCompleted, setEditCompleted] = useState<boolean>(completed);
+
+    const { register, handleSubmit, formState } = useForm<FormData>({
         defaultValues: {
-        todo: todoText,
-        completed: completed,
+            todo: todoText,
+            completed: completed,
+            userId: userId
         },
     });
     const { errors } = formState;
@@ -29,7 +49,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
             await queryClient.cancelQueries({ queryKey: ["todos"] });
 
             // cache the previous value of the todo
-            const previousTodo = queryClient.getQueryData(["todo", id]);
+            const previousTodo = queryClient.getQueryData<TodoInfo>(["todo", id]);
 
             // optimistically update the individual todo
             queryClient.setQueryData(["todo", id], {
@@ -39,50 +59,53 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
             });
 
             // update in the todos list if it exists in cache
-            const todosQueries = queryClient.getQueriesData(["todos"]);
+            const todosQueries = queryClient.getQueriesData({ queryKey: ["todos"] });
             todosQueries.forEach(([queryKey, data]) => {
-                if (data?.data) {
-                queryClient.setQueryData(queryKey, {
-                    ...data,
-                    data: data.data.map((todo) =>
-                    todo.id === id ? { ...todo, ...newTodo } : todo
+                if (data && typeof data === 'object' && 'data' in data) {
+                    const typedData = data as { data: TodoInfo[] }; 
+                    queryClient.setQueryData(queryKey, {
+                    ...typedData,
+                    data: typedData.data.map((todo) =>
+                        todo.id === id ? { ...todo, ...newTodo } : todo
                     ),
-                });
+                    });
                 }
             });
 
             return { previousTodo };
             },
-            onError: (err, variables, context) => {
+            onError: (err: Error, variables, context) => {
                 if (context?.previousTodo) {
                     queryClient.setQueryData(["todo", variables.id], context.previousTodo);
                 }
-                toast.error("Failed to update todo", err.message);
+                toast.error("Failed to update todo");
             },
             onSuccess: () => {
                 toast.success("Todo updated successfully");
             },
         });
 
-        function handleCompleted(e) {
-            setEditCompleted(e.target.checked);
+        function handleCompleted(e: React.ChangeEvent<HTMLInputElement>): void {
+            const target = e.target as HTMLInputElement;
+            setEditCompleted(target.checked);
         }
 
-        function handleEditTodoTitle(e) {
-            setEditTodo(e.target.value);
+        function handleEditTodoTitle(e: React.ChangeEvent<HTMLInputElement>) {
+            const target = e.target as HTMLInputElement
+            setEditTodo(target.value);
         }
 
-        function onSubmit(data) {
+        function onSubmit(data: TodoInfo) {
             // console.log(data);
             const newTodo = {
                 id: id,
-                userId: userId,
+                userId: data.userId,
                 todo: data.todo,
                 completed: data.completed,
             };
             console.log(newTodo);
             updateTodoMutation({
-                id: id,
+                id: id as string,
                 newTodo: newTodo,
             });
             setIsEditOpen(false);
@@ -99,7 +122,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
                 aria-label="Edit Todo Input"
                 type="text"
                 value={editTodo}
-                name="todo"
+                // name="todo"
                 {...register("todo", { required: "Todo is required" })}
                 onChange={handleEditTodoTitle}
                 placeholder="Edit Todo"
@@ -113,7 +136,7 @@ const TodoEditForm = ({ todo, setIsEditOpen }) => {
                     aria-label="Completed Checkbox"
                     type="checkbox"
                     id="completed"
-                    name="completed"
+                    // name="completed"
                     checked={editCompleted}
                     {...register("completed")}
                     onChange={handleCompleted}

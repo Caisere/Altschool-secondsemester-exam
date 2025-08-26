@@ -1,8 +1,18 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
-const PageContext = createContext();
 
-const PageProvider = ({ children }) => {
+type PageProviderProps = {
+    children: ReactNode
+}
+
+type PageContextType = {
+    pageParam: number,
+    setPageParam: React.Dispatch<React.SetStateAction<number>>
+}
+
+const PageContext = createContext<PageContextType | undefined>(undefined);
+
+const PageProvider = ({ children }: PageProviderProps) => {
     const [pageParam, setPageParam] = useState(1);
 
     return (

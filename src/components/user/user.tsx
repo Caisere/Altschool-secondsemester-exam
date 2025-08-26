@@ -1,4 +1,3 @@
-import React from 'react'
 import Avatar from './avatar'
 import { getGithubUser } from '../../api/apiCall'
 import { useQuery } from '@tanstack/react-query'
@@ -6,12 +5,16 @@ import UserDetails from './userdetails'
 // import { Loader2 } from 'lucide-react'
 import UserLoadingSkeleton from '../loadingskeleton/userloadingskeleton'
 
+import type { GithubUser } from '../../types'
+
 
 const User = () => {
-    const {data: user, isPending: isLoading, error} = useQuery({
+    const {data: user, isPending: isLoading, error} = useQuery<GithubUser>({
         queryKey: ['github-user'],
         queryFn: getGithubUser,
     })
+
+    // console.log(user)
 
     const {avatar_url} = user || {};
     // loading state

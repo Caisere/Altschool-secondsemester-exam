@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Sidebar } from '../components'
 import { Menu, X } from 'lucide-react'
 import { Outlet } from 'react-router-dom'

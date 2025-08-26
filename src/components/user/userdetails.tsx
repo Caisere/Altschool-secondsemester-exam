@@ -1,8 +1,13 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Github } from 'lucide-react'
 
-const UserDetails = ({user}) => {
+import type { GithubUser } from '../../types'
+
+type UserDetailsProps = {
+    user: GithubUser;
+}
+
+const UserDetails = ({user}: UserDetailsProps) => {
         const {
             name,
             bio,
