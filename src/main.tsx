@@ -5,7 +5,7 @@ import App from './App'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorBoundaryFallback from './pages/errorboundaryfallback'
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
             <App />

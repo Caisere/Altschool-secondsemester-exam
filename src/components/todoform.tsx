@@ -1,27 +1,45 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLocalTodo } from "../utils/localStorage";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
-import { usePageContext } from "@/context/PageContext";
+import { usePageContext } from "../context/PageContext";
+import type { TodoInfo } from "../types";
 
-const TodoForm = ({ setIsOpen }) => {
+type TodoFormProps = {
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+type TodoFormContext = {
+    previousTodos? : TodosResponse
+}
+
+interface TodosResponse {
+    data: TodoInfo[];
+}
+
+interface FormData {
+    'add-todo': string
+}
+
+
+const TodoForm = ({ setIsOpen }: TodoFormProps) => {
     const queryClient = useQueryClient();
     const {pageParam} = usePageContext();
-    const { register, handleSubmit, reset, formState } = useForm();
+    const { register, handleSubmit, reset, formState } = useForm<FormData>();
     const { errors } = formState;
 
     const { mutate: addTodoMutation, isPending } = useMutation({
         mutationFn: addLocalTodo,
-        onMutate: async (newTodo) => {
+        onMutate: async (newTodo): Promise<TodoFormContext> => {
             // Cancel any outgoing refetches
             await queryClient.cancelQueries({ queryKey: ["todos"] });
 
             // Get the current todos for the first page
-            const previousTodos = queryClient.getQueryData(["todos", pageParam]);
+            const previousTodos = queryClient.getQueryData<TodosResponse>(["todos", pageParam]) as TodosResponse;
 
             // Optimistically update the cache with the new local todo
             if (previousTodos) {
@@ -36,7 +54,7 @@ const TodoForm = ({ setIsOpen }) => {
             }
             return { previousTodos };
         },
-        onError: (error, newTodo, context) => {
+        onError: (error, newTodo, context: TodoFormContext | undefined) => {
             if (context?.previousTodos) {
                 queryClient.setQueryData(["todos", pageParam], context.previousTodos);
             }
@@ -44,7 +62,7 @@ const TodoForm = ({ setIsOpen }) => {
         },
         onSuccess: (newTodo) => {
             // Update the cache with the actual local todo (with proper ID)
-            const previousTodos = queryClient.getQueryData(["todos", pageParam]);
+            const previousTodos = queryClient.getQueryData<TodosResponse>(["todos", pageParam]);
             if (previousTodos) {
                 queryClient.setQueryData(["todos", pageParam], {
                     ...previousTodos,
@@ -57,10 +75,10 @@ const TodoForm = ({ setIsOpen }) => {
         },
     });
 
-    function onSubmit(data) {
+    function onSubmit (data: FormData){
         // new todo object
         const newTodo = {
-            todo: data["add-todo"],
+            todo: data["add-todo"] as string ,
             completed: false,
             userId: 1,
         };
@@ -89,7 +107,7 @@ const TodoForm = ({ setIsOpen }) => {
                     className="flex-1 border border-gray-200 rounded-md p-2 w-full focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-secBackground"
                     type="text"
                     placeholder="Add a new todo"
-                    name="add-todo"
+                    // name="add-todo"
                     {...register("add-todo", { required: "Todo is required" })}
                 />
                 {errors?.["add-todo"]?.message && <p className="text-red-500">{errors["add-todo"].message}</p>}

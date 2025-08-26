@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEachTodo } from "../api/apiCall";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { EachTodoSkeleton } from "./loadingskeleton";
 // import { PageLoader } from "./loadingskeleton";
 import {
@@ -11,15 +11,15 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
-} from "@/components/ui/card";
+} from "./ui/card";
 // import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 // import { Input } from '@/components/ui/input';
-import { TodoEditForm } from "@/components";
+import  TodoEditForm  from "./todoeditform";
 import { getLocalTodoById } from "../utils/localStorage";
 
 const Todo = () => {
-    const [isEditOpen, setIsEditOpen] = useState(false);
-    const { id } = useParams();
+    const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+    const { id }  = useParams() 
 
     const {
         data: eachTodo,
@@ -29,7 +29,7 @@ const Todo = () => {
         queryKey: ["todo", id],
         queryFn: async () => {
             // Check if it's a local todo first
-            if (id.startsWith("local-")) {
+            if (id?.startsWith("local-")) {
                 const localTodo = getLocalTodoById(id);
                 if (!localTodo) {
                     throw new Error("Todo not found");
@@ -37,9 +37,11 @@ const Todo = () => {
                 return localTodo;
             }
             // If the todo is not from the local todo (newly created todo), fetch from API using the API Id from the todo url.
-            return getEachTodo(id);
+            return getEachTodo(id as string);
         },
     });
+
+    console.log(eachTodo)
 
     // const [editTodo, setEditTodo] = useState(eachTodo?.title);
     // const navigate = useNavigate();
@@ -50,7 +52,7 @@ const Todo = () => {
     //     navigate(-1);
     // }
 
-    function handleEdit(e) {
+    function handleEdit(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         e.stopPropagation();
         setIsEditOpen((is) => !is);

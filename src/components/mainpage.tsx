@@ -1,9 +1,17 @@
-import React, { useState } from "react";
-import { TodoForm, Todos } from "../components";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { TodoForm, Todos } from "./index";
+import { Button } from "./ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "../api/apiCall";
-import { usePageContext } from "@/context/PageContext";
+import { usePageContext } from "../context/PageContext";
+
+
+type Todos = {
+    completed: boolean;
+    id: number;
+    todo: string;
+    userId: number;
+}
 
 const MainPage = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +24,8 @@ const MainPage = () => {
         queryFn: () => getTodos(),
     });
 
-    const todos = data?.data || [];
+    const todos: Todos[] = data?.data || [];
+    // console.log(todos)
     const activeTodos = todos.filter((todo) => !todo.completed).length;
     const completedTodos = todos.filter((todo) => todo.completed).length;
 

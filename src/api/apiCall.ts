@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { TodoInfo } from "../types";
 
 // const BASED_URL = "https://jsonplaceholder.typicode.com";
 const BASED_URL = "https://dummyjson.com";
@@ -42,7 +43,7 @@ async function getTodos(pageParam = 1, limit = 10) {
 }
 
 // API Request to get a specific todo with the todo id
-async function getEachTodo(id) {
+async function getEachTodo(id: string) {
     try {
         const response = await axios.get(`${BASED_URL}/todos/${id}`);
         // console.log(response.data);
@@ -53,28 +54,28 @@ async function getEachTodo(id) {
 }
 
 // API Request to add a new todo
-async function addTodo(todo) {
-    try {
-        const response = await axios.post(`${BASED_URL}/todos`, todo);
-        return response.data;
-    } catch {
-        throw new Error("Failed to add todo");
-    }
-}
+// async function addTodo(todo) {
+//     try {
+//         const response = await axios.post(`${BASED_URL}/todos`, todo);
+//         return response.data;
+//     } catch {
+//         throw new Error("Failed to add todo");
+//     }
+// }
 
 // API Request to update a todo using the todo id
-async function updateTodo({ id, newTodo }) {
+async function updateTodo({ id, newTodo }: {id: string, newTodo: TodoInfo}) {
     try {
         const response = await axios.put(`${BASED_URL}/todos/${id}`, newTodo);
         console.log(response.data);
         return response.data;
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(`Failed to update todo: ${error.message}`);
     }
 }
 
 // API Request to delete a todo using the todo id
-async function deleteTodo(id) {
+async function deleteTodo(id: string) {
     try {
         const response = await axios.delete(`${BASED_URL}/todos/${id}`);
         console.log(response.data);
@@ -87,7 +88,7 @@ async function deleteTodo(id) {
 
 export {
     getTodos,
-    addTodo,
+    // addTodo,
     updateTodo,
     deleteTodo,
     getGithubUser,

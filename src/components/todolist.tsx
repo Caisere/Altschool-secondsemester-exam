@@ -4,30 +4,46 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteTodo } from '../api/apiCall';
 import toast from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button'
+import { Button } from './ui/button'
+import type { TodoInfo } from '../types';
+
+type TodoListProps = {
+    todo: TodoInfo, 
+    pageParam: number
+}
+
+interface TodosResponse {
+    data: TodoInfo[];
+}
+
+interface DeleteTodoContext {
+    previousTodos: TodosResponse; 
+}
 
 
-const TodoList = ({todo, pageParam}) => {
+const TodoList = ({todo, pageParam}: TodoListProps) => {
     const queryClient = useQueryClient();
     const {id, todo: todoText, completed} = todo;
 
     const {mutate: deleteTodoMutation} = useMutation({
         mutationFn: deleteTodo,
-        onMutate: async (id) => {
+        onMutate: async (id: string): Promise<DeleteTodoContext> => {
             await queryClient.cancelQueries({queryKey: ['todos', pageParam]})
 
-            const previousTodos = queryClient.getQueryData(['todos', pageParam])
-            console.log('previousTodos', previousTodos);
+            const previousTodos = queryClient.getQueryData<TodosResponse>(['todos', pageParam]) as TodosResponse
+            // console.log('previousTodos', previousTodos);
+            console.log(queryClient.getQueryData(['todos', pageParam]));
 
             if (previousTodos) {
-                queryClient.setQueryData(['todos', pageParam], {
+                queryClient.setQueryData<TodosResponse>(['todos', pageParam], {
                     ...previousTodos,
-                    data: previousTodos?.data?.filter(todo => todo.id !== id)
+                    data: previousTodos.data.filter(todo => todo.id !== id)
                 });
             }
-            // return {previousTodos};
+
+            return {previousTodos};
         },
-        onError: (error, variables, context) => {
+        onError: (error: Error, variables, context: DeleteTodoContext | undefined) => {
             if (context?.previousTodos) {
                 queryClient.setQueryData(['todos'], context.previousTodos);
             }
@@ -42,15 +58,15 @@ const TodoList = ({todo, pageParam}) => {
         }
     })
 
-    function handleDelete(e) {
+    function handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         e.stopPropagation();
-        deleteTodoMutation(id);
+        deleteTodoMutation(id as string);
         // console.log('deleting todo', id);
     }
 
 
-    function handleComplete(e) {
+    function handleComplete(e: React.ChangeEvent<HTMLInputElement>) {
         e.preventDefault();
         e.stopPropagation();
         // console.log('completing todo', id);
