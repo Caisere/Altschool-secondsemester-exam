@@ -1,15 +1,25 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense} from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { PageLoader } from "./components/loadingskeleton";
 import { PageProvider } from "./context/PageContext";
 import DocumentTitle from "./components/pagetitle/DocumentTitle";
+
+import ProtectedRoute from "./components/protectedroute";
+import { useEffect } from 'react';
+import supabase from './services/supabase';
+import { AuthHandler } from "./utils/authHandler";
+
+
 // import { PageNavigationSkeleton } from './components/loadingskeleton'
 
 // lazy loading of pages
-const HomePage = lazy(() => import("./pages/homepage"));
+const Dashboard = lazy(() => import("./pages/homepage"));
+const SignUp = lazy(() => import("./pages/signup"))
+const SignIn = lazy(() => import("./pages/signin"))
+const Home = lazy(() => import("./pages/home"))
 const PageNotFound = lazy(() => import("./pages/pagenotfound"));
 const Todo = lazy(() => import("./components/todo"));
 const MainPage = lazy(() => import("./components/mainpage"));
@@ -23,7 +33,11 @@ const queryClient = new QueryClient({
     },
 });
 
+
+
+
 function App() {
+
     return (
         <PageProvider>
             <QueryClientProvider client={queryClient}>
@@ -57,10 +71,19 @@ function App() {
                     }}
                 />
                 <BrowserRouter>
+                    <AuthHandler queryClient={queryClient}/>
                     <DocumentTitle />
                     <Suspense fallback={<PageLoader />}>
                         <Routes>
-                            <Route path="/" element={<HomePage />}>
+
+                            <Route path='/' element={<Home/>} />
+                            <Route path='signup' element={<SignUp/>} />
+                            <Route path='signin' element={<SignIn/>} />
+                            <Route path="/dashboard" element={
+                                <ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>
+                            }>
                                 <Route index element={<MainPage />} />
                                 <Route path="todo/:id" element={<Todo />} />
                             </Route>
