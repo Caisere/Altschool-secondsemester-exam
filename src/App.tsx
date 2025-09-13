@@ -8,7 +8,7 @@ import { PageProvider } from "./context/PageContext";
 import DocumentTitle from "./components/pagetitle/DocumentTitle";
 
 import ProtectedRoute from "./components/protectedroute";
-import { AuthHandler } from "./utils/authHandler.ts";
+import { AuthHandler } from "./utils/authHandler";
 
 
 // lazy loading of pages
