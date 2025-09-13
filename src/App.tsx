@@ -1,15 +1,21 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { PageLoader } from "./components/loadingskeleton";
 import { PageProvider } from "./context/PageContext";
 import DocumentTitle from "./components/pagetitle/DocumentTitle";
-// import { PageNavigationSkeleton } from './components/loadingskeleton'
+
+import ProtectedRoute from "./components/protectedroute";
+import supabase from "./services/supabase";
+import toast from "react-hot-toast";
 
 // lazy loading of pages
-const HomePage = lazy(() => import("./pages/homepage"));
+const Dashboard = lazy(() => import("./pages/homepage"));
+const SignUp = lazy(() => import("./pages/signup"))
+const SignIn = lazy(() => import("./pages/signin"))
+const Home = lazy(() => import("./pages/home"))
 const PageNotFound = lazy(() => import("./pages/pagenotfound"));
 const Todo = lazy(() => import("./components/todo"));
 const MainPage = lazy(() => import("./components/mainpage"));
@@ -22,6 +28,33 @@ const queryClient = new QueryClient({
         },
     },
 });
+
+// AuthHandler component defined inline
+function AuthHandler({ queryClient }: { queryClient: QueryClient }) {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (event, session) => {
+                console.log('Auth event:', event, session);
+                
+                if (event === 'SIGNED_IN' && session) {
+                    // User just signed in (including OAuth)
+                    await queryClient.invalidateQueries({ queryKey: ['user'] });
+                    toast.success('Welcome!');
+                    navigate('/dashboard');
+                } else if (event === 'SIGNED_OUT') {
+                    queryClient.setQueryData(['user'], null);
+                    navigate('/');
+                }
+            }
+        );
+
+        return () => subscription.unsubscribe();
+    }, [queryClient, navigate]);
+
+    return null;
+}
 
 function App() {
     return (
@@ -57,10 +90,18 @@ function App() {
                     }}
                 />
                 <BrowserRouter>
+                    <AuthHandler queryClient={queryClient}/>
                     <DocumentTitle />
                     <Suspense fallback={<PageLoader />}>
                         <Routes>
-                            <Route path="/" element={<HomePage />}>
+                            <Route path='/' element={<Home/>} />
+                            <Route path='signup' element={<SignUp/>} />
+                            <Route path='signin' element={<SignIn/>} />
+                            <Route path="/dashboard" element={
+                                <ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>
+                            }>
                                 <Route index element={<MainPage />} />
                                 <Route path="todo/:id" element={<Todo />} />
                             </Route>

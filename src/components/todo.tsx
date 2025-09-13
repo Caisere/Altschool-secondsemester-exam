@@ -75,7 +75,7 @@ const Todo = () => {
                 </CardContent>
             </Card>
             <div className="flex justify-center items-center gap-4">
-                <Link role="link" aria-label="Back Link" to="/">
+                <Link role="link" aria-label="Back Link" to="/dashboard">
                     <Button role="button" aria-label="Back Button" className="bg-black/70 hover:bg-black text-white px-4 py-2 rounded-md cursor-pointer">
                         Back
                     </Button>

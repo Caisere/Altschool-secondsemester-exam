@@ -76,7 +76,7 @@ const TodoList = ({todo, pageParam}: TodoListProps) => {
     return (
         <li className='flex items-center justify-between w-full border border-gray-200 p-2 rounded-md' role="listitem">
             <input type="checkbox" checked={completed} className='mx-2' onChange={handleComplete} />
-            <Link to={`/todo/${id}`} className='flex items-center justify-start w-full gap-2' role="link">
+            <Link to={`/dashboard/todo/${id}`} className='flex items-center justify-start w-full gap-2' role="link">
                 <p className='flex-1'>{todoText}</p>
             </Link>
             <Button 
