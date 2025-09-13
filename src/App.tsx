@@ -11,8 +11,6 @@ import ProtectedRoute from "./components/protectedroute";
 import { AuthHandler } from "./utils/authHandler.ts";
 
 
-// import { PageNavigationSkeleton } from './components/loadingskeleton'
-
 // lazy loading of pages
 const Dashboard = lazy(() => import("./pages/homepage"));
 const SignUp = lazy(() => import("./pages/signup"))
@@ -30,7 +28,6 @@ const queryClient = new QueryClient({
         },
     },
 });
-
 
 
 
