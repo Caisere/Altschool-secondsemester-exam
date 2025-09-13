@@ -1,16 +1,14 @@
 import { lazy, Suspense} from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { PageLoader } from "./components/loadingskeleton";
 import { PageProvider } from "./context/PageContext";
 import DocumentTitle from "./components/pagetitle/DocumentTitle";
 
 import ProtectedRoute from "./components/protectedroute";
-import { useEffect } from 'react';
-import supabase from './services/supabase';
-import { AuthHandler } from "./utils/authHandler";
+import { AuthHandler } from "./utils/authHandler.ts";
 
 
 // import { PageNavigationSkeleton } from './components/loadingskeleton'
