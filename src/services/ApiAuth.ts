@@ -78,7 +78,8 @@ export async function signInWithGithub () {
 
 export async function signInWithGoogle () {
     const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google'
+        provider: 'google',
+        options: {redirectTo: 'https://altschool-secondsemester-exam.vercel.app/dashboard'}
     })
 
     if(error) {
