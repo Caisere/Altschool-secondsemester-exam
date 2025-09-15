@@ -30,7 +30,7 @@ const MainPage = () => {
     const completedTodos = todos.filter((todo) => todo.completed).length;
 
     return (
-        <main className="min-h-screen p-4 flex-1 md:flex md:flex-row md:justify-center md:items-center md:w-full md:relative md:flex-1 md:left-[10%]">
+        <main className="min-h-screen p-4 flex-1 md:flex md:flex-row md:justify-center md:items-center md:w-full ">
             <section className="max-w-full mx-auto pt-8 flex flex-col items-center gap-4">
                 {/* Header */}
                 <div className="text-center mb-12 animate-fade-in">

@@ -1,7 +1,7 @@
-import Avatar from './avatar'
+// import Avatar from './avatar'
 import { getGithubUser } from '../../api/apiCall'
 import { useQuery } from '@tanstack/react-query'
-import UserDetails from './userdetails'
+// import UserDetails from './userdetails'
 // import { Loader2 } from 'lucide-react'
 import UserLoadingSkeleton from '../loadingskeleton/userloadingskeleton'
 
@@ -24,8 +24,8 @@ const User = () => {
 
     return (
         <aside className='flex flex-col gap-2 w-full justify-center items-center'>
-            <Avatar avatar={avatar_url} />
-            <UserDetails user={user} />
+            {/* <Avatar avatar={avatar_url} /> */}
+            {/* <UserDetails user={user} /> */}
         </aside>
     )
 }

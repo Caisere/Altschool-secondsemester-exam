@@ -14,4 +14,39 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "@tanstack/react-query",
+      "@supabase/supabase-js",
+      "lucide-react",
+      "react-hot-toast",
+    ],
+    exclude: ["@tanstack/react-query-devtools"],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          query: ["@tanstack/react-query"],
+          supabase: ["@supabase/supabase-js"],
+          ui: [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-label",
+            "@radix-ui/react-slot",
+          ],
+          icons: ["lucide-react", "react-icons"],
+        },
+      },
+    },
+  },
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
 });

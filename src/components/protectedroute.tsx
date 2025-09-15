@@ -1,27 +1,41 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PageLoader } from "./loadingskeleton";
 
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isPending, isAuthenticated } = useUser();
+  const navigate = useNavigate();
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
-function ProtectedRoute({children}:{children: React.ReactNode}) {
+  useEffect(() => {
+    // Add a small delay to prevent flash of loading screen
+    const timer = setTimeout(() => {
+      setHasCheckedAuth(true);
+    }, 100);
 
-    const {isPending, isAuthenticated} = useUser()
+    return () => clearTimeout(timer);
+  }, []);
 
-    const navigate = useNavigate()
+  useEffect(() => {
+    if (hasCheckedAuth && !isAuthenticated && !isPending) {
+      console.log("Redirecting to home - not authenticated");
+      navigate("/");
+    }
+  }, [isAuthenticated, isPending, navigate, hasCheckedAuth]);
 
+  // Show loading while checking auth or if still pending
+  if (isPending || !hasCheckedAuth) {
+    return <PageLoader />;
+  }
 
-    useEffect(() => {
-        if(!isAuthenticated && !isPending) {
-            navigate('/')
-        }
-    }, [isAuthenticated, isPending, navigate])
+  // If authenticated, show children
+  if (isAuthenticated) {
+    return <>{children}</>;
+  }
 
-    if (isPending) return <PageLoader />
-
-    if (isAuthenticated) return children
-
-    return null
+  // If not authenticated and checked, return null (will redirect)
+  return null;
 }
 
 export default ProtectedRoute;

@@ -1,5 +1,5 @@
 import { useState, type FormEvent} from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Github, Mail } from 'lucide-react';
 import { Link} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSignUp} from './useSignUp';
@@ -91,7 +91,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
             className="w-full flex justify-start md:justify-center items-start md:items-center"
             onSubmit={handleSubmit(handleSignUp)}
             >
-                <div className="mx-auto w-full md:w-[50%] py-4 px-8 md:p-0 md:px-0">
+                <div className="mx-auto w-full md:w-[60%] py-4 px-8 md:p-0 md:px-0">
                     <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-8 text-center ">
                         Create An Account
                     </h2>
@@ -103,7 +103,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                             {...register('fullName', {
                                 required: ('Full Name is required'),
                             })}
-                            className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                            className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:outline-none transition-colors duration-200 text-base rounded-sm focus:border-b-gray-500 focus:border-b-2"
                             placeholder="Full Name"
                             disabled={isSigningUp}
                         />
@@ -117,7 +117,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                             {...register('email', {
                                 required: ('Email is required')
                             })}
-                            className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                            className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-b-gray-500 focus:border-b-2 focus:outline-none transition-colors duration-200 text-base rounded-sm"
                             placeholder="email.email@mail.com"
                             disabled={isSigningUp}
                         />
@@ -135,7 +135,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                                     message: 'Password need a minimum of 8 character'
                                 }
                             })}
-                            className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                            className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-b-gray-500 focus:border-b-2 focus:outline-none transition-colors duration-200 text-base rounded-sm"
                             placeholder="Password"
                             disabled={isSigningUp}
                         />
@@ -157,7 +157,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                                 required: ('Confirm Password is required'),
                                 validate: (value) => value === getValues().password || 'Password need to match'
                             })}
-                            className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                            className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-b-gray-500 focus:border-b-2 focus:outline-none transition-colors duration-200 text-base rounded-sm"
                             placeholder="Confirm Password"
                             disabled={isSigningUp}
                         />
@@ -187,16 +187,18 @@ function RegisterForm({formAction}:RegisterFormProp) {
                     {/* Social Sign In Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-8">
                         <button 
-                            className="bg-gray-200 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
+                            className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
                             onClick={handleSignUpWithGoogle}
                         >
-                            Google
+                            <span><Mail /></span>
+                            Continue with Google
                         </button>
                         <button 
-                            className="bg-gray-200 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700  font-medium py-3 px-4 rounded-lg transition-colors duration-300 text-sm"
+                            className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700  font-medium py-3 px-4 rounded-lg transition-colors duration-300 text-sm"
                             onClick={handleSignUpWithGithub}
                         >
-                            Github
+                            <span><Github /></span>
+                            Continue with Github
                         </button>
                     </div>
                     
@@ -220,7 +222,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
             className="w-full flex justify-start md:justify-center items-start md:items-center"
             onSubmit={handleSubmit(handleLogin)}
         >
-            <div className="mx-auto w-full md:w-[50%] px-8">
+            <div className="mx-auto w-full md:w-[60%] px-8">
                 <h2 className="text-4xl md:text-3xl font-bold text-[#1a1a1a] mb-8 text-center">Login</h2>
                 
                 {/* Email Input */}
@@ -230,7 +232,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                         {...register('email', {
                             required: ('Email is required')
                         })}
-                        className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                        className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:outline-none transition-colors duration-200 text-base rounded-sm focus:border-b-gray-500 focus:border-b-2"
                         placeholder="email.email@mail.com"
                         disabled={isSigningIn}
                     />
@@ -248,7 +250,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                                 message: 'Password need a minimum of 8 character'
                             }
                         })}
-                        className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-gray-500 focus:outline-none transition-colors duration-200 text-base rounded-sm"
+                        className="w-full px-2 py-3 pr-10 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-b-gray-500 focus:border-b-2 focus:outline-none transition-colors duration-200 text-base rounded-sm"
                         placeholder="Password"
                         disabled={isSigningIn}
                     />
@@ -277,16 +279,18 @@ function RegisterForm({formAction}:RegisterFormProp) {
                 {/* Social Sign In Buttons */}
                 <div className="grid grid-cols-2 gap-3 mb-8">
                     <button 
-                        className="bg-gray-200 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
+                        className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
                         onClick={handleSignUpWithGoogle}
                     >
-                        Google
+                        <span><Mail/></span>
+                        Continue with Google
                     </button>
                     <button 
-                        className="bg-gray-200 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
+                        className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
                         onClick={handleSignUpWithGithub}
                     >
-                        Github
+                        <span><Github /></span>
+                        Continue with Github
                     </button>
                 </div>
                 
