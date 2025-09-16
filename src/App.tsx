@@ -41,7 +41,7 @@ function AuthHandler({ queryClient }: { queryClient: QueryClient }) {
                 if (event === 'SIGNED_IN' && session) {
                     // User just signed in (including OAuth)
                     await queryClient.invalidateQueries({ queryKey: ['user'] });
-                    toast.success('Welcome!');
+                    // toast.success('Welcome!');
                     navigate('/dashboard');
                 } else if (event === 'SIGNED_OUT') {
                     queryClient.setQueryData(['user'], null);
@@ -62,7 +62,7 @@ function App() {
             <QueryClientProvider client={queryClient}>
                 {/* Toaster for notifications */}
                 <Toaster
-                    position="top-center"
+                    position="top-right"
                     gutter={12} //space between the toast
                     containerStyle={{
                         //style of the toast container
