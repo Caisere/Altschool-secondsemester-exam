@@ -66,7 +66,8 @@ export async function logout() {
 
 export async function signInWithGithub () {
     const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github'
+        provider: 'github',
+        options: {redirectTo: 'https://altschool-secondsemester-exam.vercel.app/dashboard'}
     })
 
     if(error) {
