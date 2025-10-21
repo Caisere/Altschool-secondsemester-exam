@@ -10,6 +10,7 @@ export function useLogin() {
     const {mutate: login, isPending: isSigningIn} = useMutation({
         mutationFn: ({email, password}:SignInProps) => signin({email, password}),
         onSuccess: (user) => {
+            console.log(user)
             toast.success(`Welcome ${user.user.user_metadata.fullName}`)
             navigate('/dashboard')
         },

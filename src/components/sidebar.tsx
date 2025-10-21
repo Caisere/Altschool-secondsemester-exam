@@ -4,6 +4,7 @@ import Search from './search'
 import TaskFilter from './taskfilter'
 import ListFilter from './listfilter'
 import { Link } from 'react-router-dom'
+import { Spinner } from './ui/spinner'
 
 const Sidebar = () => {
 
@@ -32,7 +33,7 @@ const Sidebar = () => {
                     disabled={isLoggingOut}
                 >
                     <span><LogOut width={16} /></span>
-                    Sign Out
+                    {isLoggingOut ? <span>Signing Out <Spinner/> </span>  : "Sign Out"}
                 </button>
             </div>
             

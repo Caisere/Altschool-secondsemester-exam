@@ -42,9 +42,12 @@ export async function signin({ email, password }: SignInProps) {
 
 export async function getCurrentUser() {
   try {
-    const { data: session } = await supabase.auth.getSession();
+    // const { data: session } = await supabase.auth.getSession();
 
-    if (!session.session) return null;
+    // if (!session.session) {
+    //     console.log('No user found')
+    //     return null
+    // };
 
     const { data, error } = await supabase.auth.getUser();
 
@@ -91,3 +94,5 @@ export async function signInWithGoogle() {
 
   return data;
 }
+
+

@@ -1,8 +1,12 @@
+import { useCurrentUserTask } from "@/features/tasks/useCurrentUserTask";
 import { BrickWall, ChevronsRight, ListChecks } from "lucide-react";
 import { Link } from "react-router-dom";
 
 
 function TaskFilter() {
+
+    const {tasks} = useCurrentUserTask()
+
     return (
         <section className="flex flex-col gap-2 border-b pb-6">
             <h3 className="text-lg font-semibold ">Tasks</h3>
@@ -12,7 +16,7 @@ function TaskFilter() {
                         <span><ListChecks width={16} /></span>
                         <p>Today</p>
                     </Link>
-                    <p className="bg-bgHover px-4 py-[0.4px] rounded text-[#1a1a1a]">5</p>
+                    <p className="bg-bgHover px-4 py-[0.4px] rounded text-[#1a1a1a]">{tasks?.tasks.length}</p>
                 </li>
                 <li className="flex justify-between items-center hover:bg-bgHover hover:text-[#1a1a1a] py-1 px-3 transition-colors duration-300 rounded">
                     <Link to='/dashboard/upcoming' className="flex gap-2">

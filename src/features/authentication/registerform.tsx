@@ -233,7 +233,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                             required: ('Email is required')
                         })}
                         className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:outline-none transition-colors duration-200 text-base rounded-sm focus:border-b-gray-500 focus:border-b-2"
-                        placeholder="email.email@mail.com"
+                        placeholder="email@mail.com"
                         disabled={isSigningIn}
                     />
                     {errors?.email && <p className='text-red-500'>{errors?.email?.message}</p>}

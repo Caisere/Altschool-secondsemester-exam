@@ -1,7 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "../../services/ApiAuth";
+import { useEffect, useState } from "react";
+import supabase from "@/services/supabase";
 
 export function useUser() {
+
+    const [isSessionLoading, setIsSessionLoading] = useState(true);
+
+    useEffect(() => {
+      // Listen for auth state changes to know when session is loaded
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'INITIAL_SESSION') {
+          setIsSessionLoading(false);
+        }
+      });
+  
+      return () => subscription.unsubscribe();
+    }, []);
+
+
   const {
     data: user,
     isPending,
@@ -10,14 +27,12 @@ export function useUser() {
     queryKey: ["user"],
     queryFn: getCurrentUser,
     retry: 1,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 10, // 10 minutes
   });
 
   return {
     user,
-    isPending,
-    isAuthenticated: !!user,
+    isPending: isPending || isSessionLoading,
+    isAuthenticated: !!user && !error,
     error,
   };
 }

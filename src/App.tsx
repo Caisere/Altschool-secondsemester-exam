@@ -18,7 +18,6 @@ const SignIn = lazy(() => import("./pages/signin"));
 const Home = lazy(() => import("./pages/home"));
 const PageNotFound = lazy(() => import("./pages/pagenotfound"));
 const Todo = lazy(() => import("./components/todo"));
-const MainPage = lazy(() => import("./components/mainpage"));
 const Settings = lazy(() => import("./pages/settings"));
 const Today = lazy(() => import("./pages/today"));
 const Upcoming = lazy(() => import("./pages/upcoming"));
@@ -42,7 +41,32 @@ const queryClient = new QueryClient({
 function AuthHandler({ queryClient }: { queryClient: QueryClient }) {
   const navigate = useNavigate();
 
+  
+
   useEffect(() => {
+
+      // Check initial session first
+      const checkInitialSession = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Initial session check:", !!session);
+        
+        if (session) {
+          // User is already authenticated
+          await queryClient.invalidateQueries({ queryKey: ["user"] });
+          if (window.location.pathname === "/" || window.location.pathname === "/signin") {
+            navigate("/dashboard");
+          }
+        } else {
+          // No session, clear user data
+          queryClient.setQueryData(["user"], null);
+          if (window.location.pathname.startsWith("/dashboard")) {
+            navigate("/");
+          }
+        }
+      };
+  
+      checkInitialSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -135,7 +159,7 @@ function App() {
             </Routes>
           </Suspense>
         </BrowserRouter>
-        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+        {process.env.NODE_ENV === 'development' && (<ReactQueryDevtools initialIsOpen={false} />)}
       </QueryClientProvider>
     </PageProvider>
   );

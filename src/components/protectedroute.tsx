@@ -5,27 +5,27 @@ import { PageLoader } from "./loadingskeleton";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isPending, isAuthenticated } = useUser();
-  const navigate = useNavigate();
-  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+//   const navigate = useNavigate();
+//   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
-  useEffect(() => {
-    // Add a small delay to prevent flash of loading screen
-    const timer = setTimeout(() => {
-      setHasCheckedAuth(true);
-    }, 100);
+//   useEffect(() => {
+//     // Add a small delay to prevent flash of loading screen
+//     const timer = setTimeout(() => {
+//       setHasCheckedAuth(true);
+//     }, 100);
 
-    return () => clearTimeout(timer);
-  }, []);
+//     return () => clearTimeout(timer);
+//   }, []);
 
-  useEffect(() => {
-    if (hasCheckedAuth && !isAuthenticated && !isPending) {
-      console.log("Redirecting to home - not authenticated");
-      navigate("/");
-    }
-  }, [isAuthenticated, isPending, navigate, hasCheckedAuth]);
+//   useEffect(() => {
+//     if (hasCheckedAuth && !isAuthenticated && !isPending) {
+//       console.log("Redirecting to home - not authenticated");
+//       navigate("/");
+//     }
+//   }, [isAuthenticated, isPending, navigate, hasCheckedAuth]);
 
   // Show loading while checking auth or if still pending
-  if (isPending || !hasCheckedAuth) {
+  if (isPending) {
     return <PageLoader />;
   }
 
