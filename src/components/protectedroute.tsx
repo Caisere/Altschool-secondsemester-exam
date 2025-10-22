@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import { useEffect, useState } from "react";
 import { PageLoader } from "./loadingskeleton";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {

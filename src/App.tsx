@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { lazy, Suspense} from "react";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
@@ -8,8 +8,6 @@ import { PageProvider } from "./context/PageContext";
 import DocumentTitle from "./components/pagetitle/DocumentTitle";
 
 import ProtectedRoute from "./components/protectedroute";
-import supabase from "./services/supabase";
-// import toast from "react-hot-toast";
 
 // lazy loading of pages
 const Dashboard = lazy(() => import("./pages/homepage"));
@@ -36,64 +34,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-// AuthHandler component defined inline
-function AuthHandler({ queryClient }: { queryClient: QueryClient }) {
-  const navigate = useNavigate();
-
-  
-
-  useEffect(() => {
-
-      // Check initial session first
-      const checkInitialSession = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        console.log("Initial session check:", !!session);
-        
-        if (session) {
-          // User is already authenticated
-          await queryClient.invalidateQueries({ queryKey: ["user"] });
-          if (window.location.pathname === "/" || window.location.pathname === "/signin") {
-            navigate("/dashboard");
-          }
-        } else {
-          // No session, clear user data
-          queryClient.setQueryData(["user"], null);
-          if (window.location.pathname.startsWith("/dashboard")) {
-            navigate("/");
-          }
-        }
-      };
-  
-      checkInitialSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state change:", event, !!session);
-
-      if (event === "SIGNED_IN" && session) {
-        // User just signed in (including OAuth)
-        await queryClient.invalidateQueries({ queryKey: ["user"] });
-
-        // Only navigate if not already on dashboard
-        if (window.location.pathname !== "/dashboard") {
-          navigate("/dashboard");
-        }
-      } else if (event === "SIGNED_OUT") {
-        queryClient.setQueryData(["user"], null);
-        // Only navigate to home if not already there
-        if (window.location.pathname !== "/") {
-          navigate("/");
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [queryClient, navigate]);
-
-  return null;
-}
 
 function App() {
   return (
@@ -129,7 +69,7 @@ function App() {
           }}
         />
         <BrowserRouter>
-          <AuthHandler queryClient={queryClient} />
+          {/* <AuthHandler queryClient={queryClient} /> */}
           <DocumentTitle />
           <Suspense fallback={<PageLoader />}>
             <Routes>

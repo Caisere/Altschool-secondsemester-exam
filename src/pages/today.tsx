@@ -32,6 +32,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { EmptyDemo } from "@/components/empty";
 
 
+
 function Todays() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -43,6 +44,7 @@ function Todays() {
 
     const {tasks} = useCurrentUserTask();
     const {createTask, isCreatingTask, error} = useCreateTask()
+
 
     // Check if we're viewing a task
     useEffect(() => {

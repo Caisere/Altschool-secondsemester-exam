@@ -49,3 +49,23 @@ export async function createTaskForCurrentUser(newTask:CreateTaskType) {
     return data
 }
 
+
+export async function getUserLists() {
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const { data, error } = await supabase
+    .from('tasks')
+    .select("lists")
+    .eq('user_id', user_Id)
+
+    if (error) {
+        throw new Error('No task found for this user')
+    }
+
+    return {data}
+}

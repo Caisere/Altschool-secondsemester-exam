@@ -42,12 +42,12 @@ export async function signin({ email, password }: SignInProps) {
 
 export async function getCurrentUser() {
   try {
-    // const { data: session } = await supabase.auth.getSession();
+    const { data: session } = await supabase.auth.getSession();
 
-    // if (!session.session) {
-    //     console.log('No user found')
-    //     return null
-    // };
+    if (!session.session) {
+        console.log('No user found')
+        throw new Error('No Seesion for this user');
+    };
 
     const { data, error } = await supabase.auth.getUser();
 
