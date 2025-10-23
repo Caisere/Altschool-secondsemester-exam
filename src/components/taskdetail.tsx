@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar, Tag } from "lucide-react";
-import { tasksList } from "@/contants/contants";
+import { useCurrentUserTask } from "@/features/tasks/useCurrentUserTask";
+import { useDeleteTask } from "@/hooks/useDeleteTask";
+import { Spinner } from "./ui/spinner";
 
 interface TaskDetailProps {
     taskId: string;
@@ -12,11 +14,12 @@ interface TaskDetailProps {
 
 const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
     const [isEditing, setIsEditing] = useState(false);
-    // const [task, setTask] = useState(mockTask);
+
+    const {tasks} = useCurrentUserTask();
+    const {deleteTask, isDeleting} = useDeleteTask()
 
 
-    const tasks = tasksList.filter(task => task.id === Number(taskId))
-    console.log(tasks)
+    const individualTask = tasks?.tasks.filter(task => task.id === Number(taskId))
 
     const handleSave = () => {
         // Implement save logic here
@@ -29,7 +32,7 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
 
     return (
         <div className="p-4 flex flex-col gap-4">
-            {tasks.map(task => (
+            {individualTask?.map(task => (
                 <div key={task.id} className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                         <div className={`px-6 py-1 rounded text-white ${task.completed ? "bg-[#38b2ac]"
@@ -57,12 +60,12 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
                             <Label htmlFor="title">Title</Label>
                             <Input
                                 id="title"
-                                value={task.task}
+                                value={task.tasks}
                                 // onChange={(e) => setTask({ ...task, title: e.target.value })}
                             />
                         </div>
                     ) : (
-                        <h1 className="text-xl font-bold">{task.task}</h1>
+                        <h1 className="text-xl font-bold">{task.tasks}</h1>
                     )}
 
                     {/* Task Description */}
@@ -90,11 +93,11 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
                             <Input
                                 type="date"
                                 id="title"
-                                value={task.dueDate}
+                                value={task.expiry_at}
                                 // onChange={(e) => setTask({ ...task, title: e.target.value })}
                             />
                             : 
-                            <p className="text-sm text-muted-foreground">{task.dueDate}</p>
+                            <p className="text-sm text-muted-foreground">{task.expiry_at}</p>
                         }
                     </div>
 
@@ -107,7 +110,7 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
                         
                         {isEditing ? (
                             <select
-                                value={task.list}
+                                value={task.lists}
                                 // onChange={(e) => setTask({ ...task, priority: e.target.value })}
                                 className="mt-1 w-full p-2 border rounded-md text-sm"
                             >
@@ -116,7 +119,7 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
                             </select>
                         ) : (
                             <p className="text-sm text-muted-foreground mt-1 capitalize">
-                                {task.list}
+                                {task.lists}
                             </p>
                         )}
                     </div>
@@ -140,8 +143,17 @@ const TaskDetail = ({ taskId, onClose }: TaskDetailProps) => {
                         {/* Delete Action Buttons */}
                         {!isEditing && (
                             <div className="flex gap-2 pt-4">
-                                <Button variant='destructive'  className="flex-1">
-                                    Delete
+                                <Button variant='destructive'  className="flex-1" 
+                                    onClick={() => {
+                                        deleteTask(task.id, {
+                                            onSettled: () => {
+                                                onClose()
+                                            }
+                                        })
+                                    }} 
+                                    disabled={isDeleting}
+                                >
+                                    {isDeleting ? <Spinner/>  : "Delete"}
                                 </Button>
                             </div>
                         )}

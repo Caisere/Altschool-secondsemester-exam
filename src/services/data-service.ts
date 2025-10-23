@@ -69,3 +69,23 @@ export async function getUserLists() {
 
     return {data}
 }
+
+export async function deleteTask (id: string) {
+
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return null
+
+    const { data, error } = await supabase
+        .from('tasks')
+        .delete()
+        .eq('id', id)
+
+    if (error) {
+        throw new Error("Can't delete the selected task at the moment. Please, try again later!")
+    }
+    return data;
+}

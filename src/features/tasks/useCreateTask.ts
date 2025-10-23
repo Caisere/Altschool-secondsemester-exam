@@ -14,6 +14,9 @@ export function useCreateTask () {
             queryClient.invalidateQueries({
                 queryKey: ['user-task']
             })
+            queryClient.invalidateQueries({
+                queryKey: ['lists']
+            })
         },
         onError: (error) => {
             console.error('Create task error:', error)

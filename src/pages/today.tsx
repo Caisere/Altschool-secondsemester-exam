@@ -34,13 +34,15 @@ import { EmptyDemo } from "@/components/empty";
 
 
 function Todays() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
     const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
     const {register, handleSubmit, control, reset} = useForm<CreateTask>()
     
+    const navigate = useNavigate();
+    const location = useLocation();
+
 
     const {tasks} = useCurrentUserTask();
     const {createTask, isCreatingTask, error} = useCreateTask()
@@ -66,9 +68,11 @@ function Todays() {
         navigate(`/dashboard/today/task/${taskId}`);
     };
 
+
     const handleCloseDrawer = () => {
         navigate("/dashboard/today");
     };
+
 
     function handleTaskSubmit(data: CreateTask) {
         const newTask = {
@@ -84,7 +88,6 @@ function Todays() {
             }   
         })
     }   
-   
 
     return (
         <>
@@ -172,9 +175,6 @@ function Todays() {
                 </Dialog>
 
                 {/* //list existing task for the current day  */}
-
-                
-
                 {tasks?.tasks.length === 0 ? (
                     <div className="mx-auto w-full">
                         <EmptyDemo setModalOpen={setIsDialogOpen} />
@@ -205,7 +205,7 @@ function Todays() {
                                 <span className="flex items-center gap-2">
                                     <div
                                     className={`w-[12px] h-[12px] rounded ${
-                                        task?.list === "Personal"
+                                        task?.lists === "personal"
                                         ? "bg-[#e53e3e]"
                                         : "bg-[#38b2ac]"
                                     }`}
