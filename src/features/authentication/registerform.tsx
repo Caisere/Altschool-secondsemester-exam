@@ -68,7 +68,6 @@ function RegisterForm({formAction}:RegisterFormProp) {
     }
 
     function handleLogin(data:FormData) {
-        console.log('logging in', data)
         const user = {
             email: data.email,
             password: data.password
@@ -279,14 +278,14 @@ function RegisterForm({formAction}:RegisterFormProp) {
                 {/* Social Sign In Buttons */}
                 <div className="grid grid-cols-2 gap-3 mb-8">
                     <button 
-                        className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
+                        className="bg-gray-200 flex items-center gap-[4px] hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
                         onClick={handleSignUpWithGoogle}
                     >
                         <span><Mail/></span>
-                        Continue with Google
+                        <span className='text-sm'>Continue with Google</span>
                     </button>
                     <button 
-                        className="bg-gray-200 flex items-center gap-2 hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
+                        className="bg-gray-200 flex items-center gap-[6px] hover:bg-[#1a1a1a] hover:text-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm"
                         onClick={handleSignUpWithGithub}
                     >
                         <span><Github /></span>

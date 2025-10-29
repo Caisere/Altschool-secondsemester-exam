@@ -35,8 +35,7 @@ export async function signin({ email, password }: SignInProps) {
   if (error) {
     throw new Error(error.message);
   }
-
-  console.log(data);
+  
   return data;
 }
 
@@ -44,10 +43,7 @@ export async function getCurrentUser() {
   try {
     const { data: session } = await supabase.auth.getSession();
 
-    if (!session.session) {
-        console.log('No user found')
-        throw new Error('No Seesion for this user');
-    };
+    if (!session.session) return null;
 
     const { data, error } = await supabase.auth.getUser();
 

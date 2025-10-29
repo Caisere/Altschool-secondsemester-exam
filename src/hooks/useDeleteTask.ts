@@ -13,6 +13,9 @@ export function useDeleteTask() {
             queryClient.invalidateQueries({
                 queryKey: ['user-task']
             })
+            queryClient.invalidateQueries({
+                queryKey: ['lists']
+            })
         },
         onError: (err) => {
             toast.error(err.message)
