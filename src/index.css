@@ -39,13 +39,17 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebarBg: #f5f6f7;
+  --color-textPrimary: #2d3748;
+  --color-textSecondary: #718096;
+  --color-bgHover: #e2e8f0;
 
   --color-secBackground: oklch(28.2% 0.091 267.935);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f5f6f7;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -125,36 +129,25 @@
   }
   body {
     @apply bg-background text-foreground;
+
   }
 }
 
-
-
-
-
-
-
-
-
 /* :root {
-    
+
     --bg-primary: #f8f9fa; 
     --bg-sidebar: #f5f6f7;
     --bg-hover: #e2e8f0;
-    
-    
+
     --text-primary: #2d3748;
     --text-secondary: #718096;
-    
-  
+
     --color-personal: #e53e3e;
     --color-work: #38b2ac;
     --color-list: #ecc94b;
-    
- 
+
     --tag-blue: #bee3f8;
     --tag-pink: #fed7d7;
-    
-  
+
     --border-color: #e2e8f0;
 } */

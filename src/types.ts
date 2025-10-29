@@ -45,3 +45,20 @@ export type TodoInfo = {
 //     data: TodoInfo[],
 //     total: number;
 // }
+
+export type CreateTask = {
+    tasks: string,
+    description: string,
+    expiry_at: string,
+    lists: string
+}
+
+
+export type CreateTaskType = {
+    tasks: string,
+    description: string,
+    expiry_at: string,
+    created_at: string,
+    lists: string,
+    completed: boolean
+}
