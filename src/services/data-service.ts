@@ -1,6 +1,8 @@
 import { getCurrentUser } from "./ApiAuth"
 import supabase from "./supabase"
 import type { CreateTaskType } from "@/types"
+import {formatISO, startOfDay, endOfDay} from 'date-fns'
+
 
 
 export async function getTasksByCurrentUser() {
@@ -11,10 +13,18 @@ export async function getTasksByCurrentUser() {
     const { data: { user } } = await supabase.auth.getUser()
     const user_Id = user?.id
 
+    const now = new Date()
+    const todayStart = formatISO(startOfDay(now));
+    const todayEnd = formatISO(endOfDay(now))
+    console.log(todayStart, todayEnd)
+
     const { data: tasks, error } = await supabase
     .from('tasks')
     .select("*")
     .eq('user_id', user_Id)
+    .gte('created_at', todayStart)
+    .lte('expiry_at', todayEnd)
+
 
     if (error) {
         throw new Error('No task found for this user')
@@ -23,6 +33,32 @@ export async function getTasksByCurrentUser() {
     return {tasks}
 }
 
+
+export async function getUpcomingTasksByCurrentUser() {
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const now = new Date()
+    const todayStart = formatISO(startOfDay(now));
+    const todayEnd = formatISO(endOfDay(now))
+    console.log(todayStart, todayEnd)
+
+    const { data: tasks, error } = await supabase
+    .from('tasks')
+    .select("*")
+    .eq('user_id', user_Id)
+    .gte('expiry_at', todayStart)
+
+    if (error) {
+        throw new Error('No task found for this user')
+    }
+
+    return {tasks}
+}
 
 export async function createTaskForCurrentUser(newTask:CreateTaskType) {
     // check for active logged in user
