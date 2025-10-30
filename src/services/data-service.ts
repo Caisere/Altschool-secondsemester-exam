@@ -126,6 +126,29 @@ export async function getUserTasks() {
     return {data}
 }
 
+
+export async function getUserStickyWalls() {
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const { data, error } = await supabase
+    .from('stickywall')
+    .select('*')
+    // .eq('user_id', user_Id)
+
+    if (error) {
+        throw new Error('No stickwall found for this user')
+    }
+
+    console.log(data)
+
+    return {data}
+}
+
 export async function deleteTask (id: string) {
 
     const currentUser = await getCurrentUser() 
