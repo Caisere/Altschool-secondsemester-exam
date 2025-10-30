@@ -131,6 +131,19 @@
     @apply bg-background text-foreground;
 
   }
+
+  .numbered-list li:nth-child(1) {
+    @apply bg-red-500 text-foreground;
+  }
+  .numbered-list li:nth-child(2) {
+    @apply bg-blue-500;
+  }
+  .numbered-list li:nth-child(3) {
+    @apply bg-green-500;
+  }
+  .numbered-list li:nth-child(4) {
+    @apply bg-yellow-500;
+  }
 }
 
 /* :root {

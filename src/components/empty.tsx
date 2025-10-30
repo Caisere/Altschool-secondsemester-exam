@@ -13,24 +13,25 @@ import type { SetStateAction, Dispatch } from "react"
 
 type EmptyDemoProp = {
     setModalOpen: Dispatch<SetStateAction<boolean>>
+    mainContent?: string
 }
 
-export function EmptyDemo({setModalOpen}:EmptyDemoProp) {
+export function EmptyDemo({setModalOpen, mainContent = 'tasks'}:EmptyDemoProp) {
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconFolderCode />
         </EmptyMedia>
-        <EmptyTitle>No Tasks Yet</EmptyTitle>
+        <EmptyTitle>No {mainContent} Yet</EmptyTitle>
         <EmptyDescription>
-          You haven&apos;t created any tasks yet. Get started by creating
-          your first task.
+          You haven&apos;t created any {mainContent} yet. Get started by creating
+          your first {mainContent}.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button onClick={() => setModalOpen(true)}>Create Project</Button>
+          <Button onClick={() => setModalOpen(true)}>Create {mainContent.toLocaleUpperCase()}</Button>
         </div>
       </EmptyContent>
       <Button

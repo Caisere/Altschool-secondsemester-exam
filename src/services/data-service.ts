@@ -5,7 +5,7 @@ import {formatISO, startOfDay, endOfDay} from 'date-fns'
 
 
 
-export async function getTasksByCurrentUser() {
+export async function getUserTodayTasks() {
     const currentUser = await getCurrentUser() 
     if (!currentUser) return null
 
@@ -102,6 +102,49 @@ export async function getUserLists() {
     if (error) {
         throw new Error('No task found for this user')
     }
+
+    return {data}
+}
+
+export async function getUserTasks() {
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const { data, error } = await supabase
+    .from('tasks')
+    .select("*")
+    .eq('user_id', user_Id)
+
+    if (error) {
+        throw new Error('No Work task found for this user')
+    }
+
+    return {data}
+}
+
+
+export async function getUserStickyWalls() {
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const { data, error } = await supabase
+    .from('stickywall')
+    .select('*')
+    // .eq('user_id', user_Id)
+
+    if (error) {
+        throw new Error('No stickwall found for this user')
+    }
+
+    console.log(data)
 
     return {data}
 }
