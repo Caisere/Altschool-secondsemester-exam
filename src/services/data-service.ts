@@ -138,7 +138,7 @@ export async function getUserStickyWalls() {
     const { data, error } = await supabase
     .from('stickywall')
     .select('*')
-    // .eq('user_id', user_Id)
+    .eq('user_id', user_Id)
 
     if (error) {
         throw new Error('No stickwall found for this user')
