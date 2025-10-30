@@ -30,6 +30,7 @@ import type { CreateTask } from "@/types";
 import { useCreateTask } from "@/features/tasks/useCreateTask";
 import { Spinner } from "@/components/ui/spinner";
 import { EmptyDemo } from "@/components/empty";
+import { endOfDay, formatISO } from "date-fns";
 
 
 
@@ -102,7 +103,7 @@ function Todays() {
                     <DialogTrigger asChild>
                         <Button
                             variant="outline"
-                            className="border w-[15%] text-start cursor-pointer p-2 rounded flex gap-2 text-sm items-start"
+                            className="border text-start cursor-pointer p-2 rounded flex gap-2 text-sm items-start"
                             onClick={() => setIsDialogOpen(true)}
                         >
                             <span>
@@ -196,7 +197,7 @@ function Todays() {
                             <div className="flex gap-2 items-center ml-8 text-[12px]">
                                 <span className="flex items-center gap-2 border-r pr-3">
                                     <Calendar width={16} />
-                                    <span className="">{task?.expiry_at}</span>
+                                    <span className="">{formatISO(endOfDay(task?.expiry_at))}</span>
                                 </span>
                                 <span className="flex items-center gap-2 border-r pr-3">
                                     {task?.completed ? <CircleCheckBig width={16} /> : <CloudAlert width={16} />}
