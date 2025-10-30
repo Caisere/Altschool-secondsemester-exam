@@ -1,11 +1,11 @@
-import { getTasksByCurrentUser, getUpcomingTasksByCurrentUser } from "@/services/data-service";
+import {getUpcomingTasksByCurrentUser, getUserTasks, getUserTodayTasks} from "@/services/data-service";
 import { useQuery } from "@tanstack/react-query";
 
 
 export function useCurrentUserTask() {
   const { data: tasks, isPending, error,} = useQuery({
     queryKey: ["user-task"],
-    queryFn: getTasksByCurrentUser,
+    queryFn: getUserTodayTasks,
     // retry: 1,
     // staleTime: 1000 * 60 * 5, // 5 minutes
     // gcTime: 1000 * 60 * 10, // 10 minutes
@@ -25,11 +25,28 @@ export function useUpcomingTaskByCurrentUser () {
         // retry: 1,
         // staleTime: 1000 * 60 * 5, // 5 minutes
         // gcTime: 1000 * 60 * 10, // 10 minutes
-      });
-    
-      return {
-        upcomingTasks,
+    });
+
+    return {
+    upcomingTasks,
+    isPending,
+    error,
+    };
+}
+
+export function useUserTasks () {
+    const { data: tasks, isPending, error,} = useQuery({
+        queryKey: ["user-total-tasks"],
+        queryFn: getUserTasks
+        // retry: 1,
+        // staleTime: 1000 * 60 * 5, // 5 minutes
+        // gcTime: 1000 * 60 * 10, // 10 minutes
+    });
+
+    return {
+        tasks,
         isPending,
         error,
-      };
+    };
 }
+
