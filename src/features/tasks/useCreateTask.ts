@@ -1,4 +1,4 @@
-import { createTaskForCurrentUser } from "@/services/data-service";
+import { createStickNoteForCurrentUser, createTaskForCurrentUser } from "@/services/data-service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -26,5 +26,27 @@ export function useCreateTask () {
 
     return {
         isCreatingTask, createTask, error
+    }
+}
+
+export function useStickyNote () {
+    const queryClient = useQueryClient()
+
+    const {mutate: createStickyNote, isPending: isCreatingStickyNote, error} = useMutation({
+        mutationFn: createStickNoteForCurrentUser,
+        onSuccess: () => {
+            toast.success('Sticky-Note Successfully Created')
+            queryClient.invalidateQueries({
+                queryKey: ['user-stickywall']
+            })
+        },
+        onError: (error) => {
+            console.error('Create StickyNote error:', error)
+            toast.error('Error while creating Sticky-Note. Please, try again later!')
+        }
+    })
+
+    return {
+        createStickyNote, isCreatingStickyNote, error
     }
 }

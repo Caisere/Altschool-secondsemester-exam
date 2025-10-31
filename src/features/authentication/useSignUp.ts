@@ -8,7 +8,7 @@ export function useSignUp() {
     const navigate = useNavigate()
 
     const {mutate: signUp, isPending: isSigningUp} = useMutation({
-        mutationFn: ({fullName, email, password}: SignUpProps) => signup({fullName, email, password}),
+        mutationFn: signup,
         onSuccess: () => {
             toast.success('Account Successful Created')
             navigate('/signin')

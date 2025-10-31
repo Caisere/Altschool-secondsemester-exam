@@ -32,7 +32,7 @@ type DialogComponentProps = {
 
 function DialogComponent({isDialogOpen, setIsDialogOpen}:DialogComponentProps) {
     // const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
-    const {register, handleSubmit, control, reset} = useForm<CreateTask>()
+    const {register, handleSubmit, control, reset, formState: {errors}} = useForm<CreateTask>()
     
     const {createTask, isCreatingTask, error} = useCreateTask()
 
@@ -69,7 +69,7 @@ function DialogComponent({isDialogOpen, setIsDialogOpen}:DialogComponentProps) {
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                    <form className="" onSubmit={handleSubmit(handleTaskSubmit)}>
+                    <form className="flex flex-col gap-2" onSubmit={handleSubmit(handleTaskSubmit)}>
                         {/* dialog header */}
                         <DialogHeader>
                             <DialogTitle>Add Task</DialogTitle>
@@ -82,7 +82,8 @@ function DialogComponent({isDialogOpen, setIsDialogOpen}:DialogComponentProps) {
                         <div className="grid gap-4">
                             <div className="grid gap-3">
                                 <Label htmlFor="task">Task*</Label>
-                                <Input id="task" placeholder="Task" {...register('tasks')} />
+                                <Input id="task" placeholder="Task" {...register('tasks', {required: 'Task is required'})} />
+                                {errors?.tasks && <p className="text-red-500 text-[12px]">{errors.tasks.message}</p>}
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="description">Description</Label>
@@ -96,10 +97,11 @@ function DialogComponent({isDialogOpen, setIsDialogOpen}:DialogComponentProps) {
                                 <Label htmlFor="description">Expires In</Label>
                                 <Input
                                     id="expiry_at"
-                                    {...register('expiry_at')}
+                                    {...register('expiry_at', {required: 'Task Due Date is required'})}
                                     type="date"
-                                    disabled
+                                    // disabled
                                 />
+                                {errors?.expiry_at && <p className="text-red-500 text-[12px]">{errors.expiry_at.message}</p>}
                             </div>
                         </div>
                         {/* categories */}

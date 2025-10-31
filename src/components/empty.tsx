@@ -31,7 +31,7 @@ export function EmptyDemo({setModalOpen, mainContent = 'tasks'}:EmptyDemoProp) {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button onClick={() => setModalOpen(true)}>Create {mainContent.toLocaleUpperCase()}</Button>
+          <Button onClick={() => setModalOpen(true)}>Create {mainContent}</Button>
         </div>
       </EmptyContent>
       <Button

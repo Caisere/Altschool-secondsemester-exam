@@ -1,6 +1,6 @@
 import { getCurrentUser } from "./ApiAuth"
 import supabase from "./supabase"
-import type { CreateTaskType } from "@/types"
+import type { CreateTaskType, StickyNote } from "@/types"
 import {formatISO, startOfDay, endOfDay} from 'date-fns'
 
 
@@ -16,14 +16,14 @@ export async function getUserTodayTasks() {
     const now = new Date()
     const todayStart = formatISO(startOfDay(now));
     const todayEnd = formatISO(endOfDay(now))
-    console.log(todayStart, todayEnd)
+
 
     const { data: tasks, error } = await supabase
-    .from('tasks')
-    .select("*")
-    .eq('user_id', user_Id)
-    .gte('created_at', todayStart)
-    .lte('expiry_at', todayEnd)
+        .from('tasks')
+        .select("*")
+        .eq('user_id', user_Id)
+        .gte('created_at', todayStart)
+        .lte('expiry_at', todayEnd)
 
 
     if (error) {
@@ -44,14 +44,14 @@ export async function getUpcomingTasksByCurrentUser() {
 
     const now = new Date()
     const todayStart = formatISO(startOfDay(now));
-    const todayEnd = formatISO(endOfDay(now))
-    console.log(todayStart, todayEnd)
+    // const todayEnd = formatISO(endOfDay(now))
+
 
     const { data: tasks, error } = await supabase
-    .from('tasks')
-    .select("*")
-    .eq('user_id', user_Id)
-    .gte('expiry_at', todayStart)
+        .from('tasks')
+        .select("*")
+        .eq('user_id', user_Id)
+        .gte('expiry_at', todayStart)
 
     if (error) {
         throw new Error('No task found for this user')
@@ -115,9 +115,9 @@ export async function getUserTasks() {
     const user_Id = user?.id
 
     const { data, error } = await supabase
-    .from('tasks')
-    .select("*")
-    .eq('user_id', user_Id)
+        .from('tasks')
+        .select("*")
+        .eq('user_id', user_Id)
 
     if (error) {
         throw new Error('No Work task found for this user')
@@ -136,15 +136,13 @@ export async function getUserStickyWalls() {
     const user_Id = user?.id
 
     const { data, error } = await supabase
-    .from('stickywall')
-    .select('*')
-    .eq('user_id', user_Id)
+        .from('stickywall')
+        .select('*')
+        .eq('user_id', user_Id)
 
     if (error) {
         throw new Error('No stickwall found for this user')
     }
-
-    console.log(data)
 
     return {data}
 }
@@ -166,5 +164,34 @@ export async function deleteTask (id: string) {
     if (error) {
         throw new Error("Can't delete the selected task at the moment. Please, try again later!")
     }
+
     return data;
+}
+
+
+
+//////////////////////////////////////////////
+export async function createStickNoteForCurrentUser(newNote:StickyNote) {
+    // check for active logged in user
+    const currentUser = await getCurrentUser() 
+    if (!currentUser) return null
+
+    // get currently login in user data
+    const { data: { user } } = await supabase.auth.getUser()
+    const user_Id = user?.id
+
+    const fullNote = {...newNote, user_id: user_Id}
+
+    const { data, error } = await supabase
+        .from('stickywall')
+        .insert([
+            fullNote,
+        ])
+        .select()
+    
+    if (error) {
+        throw new Error("Can't create task right now, Please try again later")
+    }
+
+    return data
 }

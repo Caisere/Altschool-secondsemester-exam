@@ -45,15 +45,17 @@ function RegisterForm({formAction}:RegisterFormProp) {
 
 
     function handleSignUp(data:FormData) {
-        console.log(data)
         const userObj = {
             fullName: data.fullName,
             email: data.email,
             password: data.password
         }
 
-        signUp(userObj)
-        reset()
+        signUp(userObj, {
+            onSettled: () => {
+                reset()
+            }
+        })
     }
 
     function handleSignUpWithGithub(e:FormEvent) {
@@ -117,7 +119,7 @@ function RegisterForm({formAction}:RegisterFormProp) {
                                 required: ('Email is required')
                             })}
                             className="w-full px-2 py-3 text-gray-700 bg-transparent border-1  border-gray-300 focus:border-b-gray-500 focus:border-b-2 focus:outline-none transition-colors duration-200 text-base rounded-sm"
-                            placeholder="email.email@mail.com"
+                            placeholder="email@mail.com"
                             disabled={isSigningUp}
                         />
                         {errors?.email && <p className='text-red-500'>{errors?.email?.message}</p>}
