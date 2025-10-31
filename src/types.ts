@@ -53,6 +53,11 @@ export type CreateTask = {
     lists: string
 }
 
+export type StickyNote = {
+    title: string,
+    content: string,
+}
+
 
 export type CreateTaskType = {
     tasks: string,

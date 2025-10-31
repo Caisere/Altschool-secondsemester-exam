@@ -16,8 +16,8 @@ function Personal() {
 
     return (
         <main className="min-h-screen p-4 md:p-0 flex-1 flex flex-col justify-start items-start gap-4 md:w-full text-[#1a1a1a]">
-            <div className="flex gap-4 items-center">
-                <h1 className="text-3xl font-bold">Work</h1>
+            <div className="flex gap-4 items-center border-b-1 w-full pb-2 border-stone-200">
+                <h1 className="text-3xl font-bold">Personal</h1>
                 <span className="py-1 p-3 border rounded font-semibold">{numOfPersonal?.length}</span>
             </div>
 

@@ -1,6 +1,7 @@
 import DialogComponent from "@/components/dialog-component";
 import { EmptyDemo } from "@/components/empty";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
 import { useUpcomingTaskByCurrentUser } from "@/features/tasks/useCurrentUserTask";
 import { getTomorrowsDate, getTotalWeek } from "@/utils/helper";
 import { endOfDay, formatISO, isToday } from "date-fns";
@@ -14,7 +15,7 @@ import { useState } from "react";
 
 function Upcoming() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const { upcomingTasks } = useUpcomingTaskByCurrentUser();
+  const { upcomingTasks, isPending } = useUpcomingTaskByCurrentUser();
 
   // today's task
   const todayUpcoming = upcomingTasks?.tasks.filter((task) =>
@@ -29,29 +30,37 @@ function Upcoming() {
 
   // all week upcoming weeks
   const { startWeek, endWeek } = getTotalWeek();
-  console.log({ startWeek, endWeek });
+
   const weekUpcoming = upcomingTasks?.tasks.filter((task) => {
     const taskDate = formatISO(endOfDay(task.expiry_at));
     return taskDate >= startWeek && taskDate <= endWeek;
   });
 
+  if(isPending) {
+    return (
+        <div className="flex justify-center items-center">
+            <Spinner/>
+        </div>
+    )
+  }
+
   return (
     <main className="min-h-screen p-4 md:p-0 flex-1 flex flex-col justify-start items-start gap-4 md:w-full text-[#1a1a1a]">
-      <div className="flex gap-4 items-center">
-        <h1 className="text-3xl font-bold">Upcoming</h1>
+      <div className="flex gap-4 items-center border-b-1 w-full pb-2 border-stone-200">
+        <h1 className="text-3xl font-bold text-nunito">Upcoming</h1>
         <span className="py-1 p-3 border rounded font-semibold">
           {upcomingTasks?.tasks.length}
         </span>
       </div>
       {/* today tasks */}
       <section className="w-full border-1 border-stone-200 px-4 py-2 rounded-sm flex flex-col gap-2">
-        <h1>Today</h1>
-        <div className="w-full">
+        <h1 className="font-bold text-xl">Today</h1>
+        { <div className="w-full">
           <DialogComponent
             isDialogOpen={isDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
           />
-        </div>
+        </div>}
         <div>
           {todayUpcoming?.length === 0 ? (
             <div className="mx-auto w-full">
@@ -109,7 +118,7 @@ function Upcoming() {
       </section>
       <section className="w-full flex justify-between gap-2">
         <div className="border-1 border-stone-200 px-4 py-2 rounded-sm flex-1">
-          <h1>Tomorrow</h1>
+          <h1 className="font-bold text-xl">Tomorrow</h1>
           <div>
             {tomorrowUpcoming?.length === 0 ? (
               <div className="mx-auto w-full">
@@ -166,7 +175,7 @@ function Upcoming() {
           </div>
         </div>
         <div className="border-1 border-stone-200 px-4 py-2 rounded-sm flex-1">
-          <h1>This week</h1>
+          <h1 className="font-bold text-xl">This Week</h1>
           <div>
             {weekUpcoming?.length === 0 ? (
               <div className="mx-auto w-full">

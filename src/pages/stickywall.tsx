@@ -1,24 +1,25 @@
 import { EmptyDemo } from "@/components/empty";
+import StickyDialog from "@/components/sticky-dialog";
 import { useCurrentUserStickyWall } from "@/features/tasks/useStickWall";
 import { useState } from "react";
 
 function StickyWall() {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const { stickyWalls } = useCurrentUserStickyWall();
-  console.log(stickyWalls);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  return (
+    const { stickyWalls } = useCurrentUserStickyWall();
+
+
+    return (
         <main className="min-h-screen p-4 md:p-0 flex-1 flex flex-col justify-start items-start gap-4 md:w-full text-[#1a1a1a]">
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center border-b-1 w-full pb-2 border-stone-200">
                 <h1 className="text-3xl font-bold">StickyWall</h1>
                 <span className="py-1 p-3 border rounded font-semibold">{stickyWalls?.data.length}</span>
             </div>
-
-            <button>+ Add New</button>
+            <StickyDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
 
             <section className="flex justify-center items-center w-full">
                 {stickyWalls?.data.length === 0 ? (
-                <EmptyDemo setModalOpen={setIsDialogOpen} mainContent="StickyWall" />
+                    <EmptyDemo setModalOpen={setIsDialogOpen} mainContent="StickyWall" />
                 ) : (
                     <div className="flex justify-start items-center w-full">
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full ">
